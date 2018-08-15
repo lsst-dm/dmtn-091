@@ -18,6 +18,10 @@ Data Sets Types and Goals
         - Runs in 15 minutes total on 16 cores
     * Goals
         - Test that key initial processing steps execute
+        - Allow checks for reasonable ranges of
+            - Fraction of CCDs successfully processed
+            - Numbers of stars
+            - zeropoints
     * Steps
         - ISR
         - processCcd
@@ -76,7 +80,7 @@ Data Sets Types and Goals
         - Coadd
         - DIA
         - Forced Photometry
-        - Ingest of data into database/DPDD structure
+        - Ingest of DRP data into database/DPDD structure
 
 Practical Notes
 ===============
@@ -104,7 +108,7 @@ Example Datasets
     * The HSC PDR that is currently processed bi-weekly satisfies needs for Large datasets
     * Modulo
       1. DIA
-      2. testing of ingestion of data.
+      2. testing of ingestion of DRP data.
 
 2. MEDIUM:
     a. DECam DES-SN fields.
