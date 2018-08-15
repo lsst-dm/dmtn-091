@@ -121,6 +121,7 @@ Example Datasets
       - See https://dmtn-039.lsst.io/
       - Available on lsst-dev in /datasets/decam/_internal/hits
       - Total of 2269 images available.
+      - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
       - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
         https://github.com/lsst/ap_verify_hits2015
 3. CI
