@@ -29,7 +29,7 @@ Data Sets Types and Goals
         - ~DIA~
         - ~Forced Photometry~
 
-2. Small
+2. SMALL
     * Requirements
         - 1 hour on 16-32 cores
         - Coadd at least 5 images
@@ -48,7 +48,7 @@ Data Sets Types and Goals
         - DIA
         - Forced Photometry
 
-3. Medium
+3. MEDIUM
     * Requirements
         - 8 hours on 64-128 cores
         - At least 2 filters
@@ -64,7 +64,7 @@ Data Sets Types and Goals
         - DIA
         - Forced Photometry
 
-4. Large
+4. LARGE
     * Goals
         - 48 hours on 512 cores
         - At least 3 filters
@@ -124,13 +124,25 @@ Example Datasets
       - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
       - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
         https://github.com/lsst/ap_verify_hits2015
-3. CI
+
+3. SMALL:
+    a. validation_data_hsc
+      - 51 GB.
+      - Calibration data available as pre-computed masters and used to do ISR.
+      - Currently processed on a daily (8 hour?) cadence through to coadd.
+      - Currently not used for DIA.
+
+4. CI
     a. HSC Engineering data "ci_hsc"
       - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
       - Takes several hours when running on only a few nodes.
     b. DECam HiTS
       - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
         https://github.com/lsst/ap_verify_ci_hits2015
+        Presently (2018-08-15) the data are on a branch, not yet merged to master.
+    c. validation_data_decam, validation_data_cfht
+      - Each of these is part of CI and regularly used for simple execution testing.
+      - ISR is not performed.
 
 :tocdepth: 1
 
