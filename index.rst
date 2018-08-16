@@ -8,6 +8,19 @@
 
 .. TODO: Delete the note below before merging new content to the master branch.
 
+=========
+Structure
+=========
+
+I. Dataset Types and Goals for Regular Processing and Monitoring
+II. Datasets Needs for DRP Verification
+III. Datasets Needs for AP Verficiation
+IV. Datasets Selectsion for DRP+AP Verification
+
+   **This technote is not yet published.**
+
+   Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
+
 .. Add content here.
 .. Do not include the document title (it's automatically added from metadata.yaml).
 
@@ -166,6 +179,106 @@ Example Datasets
         - Each of these is part of CI and regularly used for simple execution testing.
         - ISR is not performed.
         - Nor is coadd or DIA, but those aren't requirements for a CI-scale dataset.
+
+=================
+DRP Test Datasets
+=================
+
+The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales:
+
+ - The `ci_hsc` package (https://github.com/lsst/ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data totals 8.3G, and is comprised of 33 raw images from 12 HSC visits in r and i band, pre-made master darks, flats, and biases for these, and the necessary subset of the PS1-PV3 reference catalog.  `ci_hsc` is run automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.
+
+ - The "RC" dataset (now in its second version, sometimes called "RC2") is comprised of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This is processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `meas_mosaic`, which is not included in `ci_hsc`) as well as the pipe_analysis scripts, which generate a large suite of validation plots.  Processing currently requires considerable manual supervisions, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset.
+
+ - The full HSC Public Data Release 1 (PDR1) dataset has been processed by LSST once, and another processing run is expected to begin in the next few weeks.  The timescale for these runs is essentially as-needed, but we expect their frequency to increase as the tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.  See also https://confluence.lsstcorp.org/display/DM/S17B+HSC+PDR1+reprocessing.
+
+In the future, there are at least two additional dataset scales that would be useful:
+
+ - The minimum set necessary to run `meas_mosaic` or `jointcal`, which is the only major processing step that cannot be exercised by `ci_hsc` (because those typically require full visits, or at least large fractions of visits).  This *may* now be what's contained in the `validate_drp` package, but it is possible that some difficulties in jointcal development may be due to unusual properties or some kind of incompleteness in that dataset.  The scale of data necessary for minimal `jointcal` testing may also increase as the complexity of the algorithm is expanded.  If we can reduce the latency of CI-initiated processing by giving the CI system access to more cores, it may be most useful to just expand `ci_hsc` to be able to include `meas_mosaic` and `jointcal`.
+
+ - Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
+
+Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC PDR1:
+
+ - Variability on different timescales (for most PDR1 data, all images in a particular region with the same band are observed in the same night).
+
+ - Usage of the new r- and i-band filters (having multiple versions of the same filter is for algorithmic purposes often analogous to having sensors with different wavelength responses, as in LSST's hybrid focal plane).
+
+ - Differential chromatic refraction (HSC has an atmospheric dispersion corrector).
+
+ - LSST-like wavefront sensors (HSC's are too close to focus to be useful for learning much about the state of the optical system).
+
+ - Crowded stellar fields.
+
+A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g. physically-motivated PSF modeling).  Many non-PDR1 HSC datasets do include more interesting variability (as will PDR2, when available) and/or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from Com-Cam or even the full LSST camera are available.
+
+
+=================
+AP Test Datasets
+=================
+Summary recommendations:
+use a subset of HiTS for quick turnaround processing, smoke tests, etc.
+use a DES Deep SN field for large-scale processing
+use the DECam Bulge survey for crowded field tests
+take the DRP team's preference for an HSC field
+Desiderata for AP testing:
+tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
+the ability to exercise as many aspects of LSST pipelines and data products as possible
+public availability (so that we can feely recruit various LSST stakeholders)
+potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
+datasets should include at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
+at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
+at least one dataset should be from a camera without an ADC to test DCR
+probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras
+datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
+ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
+datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
+datasets with multiple filters will aid in understanding our DCR performance
+substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
+there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
+LSST-like cadences to test MOPS algorithms
+Candidate Datasets
+DECam
+HiTS
+already in use; see https://dmtn-039.lsst.io/
+up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
+DES SN fields
+8 shallow SN fields, 2 deep SN fields
+griz observation sequences obtained ~ weekly
+deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
+raw data available one year after taken–so in advance of the official DES releases
+DECam Bulge survey
+crowded stellar field
+Proposal ID 2013A-0719 (PI Saha)
+limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
+published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
+DECam NEO survey
+PI L. Allen
+320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
+3 seasons of data
+       2) HSC
+SSP Deep or Ultra-Deep:
+grizy; exposure times 3-5 minutes; tens of epochs available
+two UD fields and 15 deep fields
+Open Time observations from Yoshida
+tens of epochs over a couple of nights for a range of fields
+GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
+New Horizons
+crowded stellar field (Galactic Bulge)
+available to us (not fully public?); unclear details of numbers of epochs, etc.
+scientifically untapped
+
+Datasets considered but not selected
+CFHT
+SNLS
+CFHTLS-Deep
+Suitable, but no obvious reason to select CFHT over DECam?
+PTF
+Tens to thousands of epochs of public images available in two filters (g & R), but camera characteristics are markedly different–2"+ seeing, 1" pixels, and much shallower.
+ZTF
+Same sampling issues as PTF, and images will not be publicly available until 2019.
+DLS
+MOSAIC data. Has been processed through the stack (https://dmtn-063.lsst.io/), but obs_noao_mosaic is just a stub.
 
 
 .. .. rubric:: References
