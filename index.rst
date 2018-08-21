@@ -84,7 +84,7 @@ Data Sets Types and Goals
 
 Practical Notes
 ===============
-Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets.
+Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets.  Such testing is certainly important and will be the subject of a separate effort, planning, and supporting documentation.
 
 Reference catalogs will be required.
 
