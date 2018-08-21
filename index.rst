@@ -25,9 +25,6 @@ Data Sets Types and Goals
     * Steps
         - ISR
         - processCcd
-        - ~Coadd~
-        - ~DIA~
-        - ~Forced Photometry~
 
 2. SMALL
     * Requirements
