@@ -13,7 +13,7 @@ serial_number: '091'
 doc_id: 'DMTN-091'
 
 # Title of the document, without the series/serial designation
-doc_title: 'Datasets for Performance Monitoring'
+doc_title: 'Test Datasets for Scientific Performance Monitoring'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:

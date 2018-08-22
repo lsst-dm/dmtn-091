@@ -1,40 +1,4 @@
 ..
-  Technote content.
-
-  See https://developer.lsst.io/docs/rst_styleguide.html
-  for a guide to reStructuredText writing.
-
-  Do not put the title, authors or other metadata in this document;
-  those are automatically added.
-
-  Use the following syntax for sections:
-
-  Sections
-  ========
-
-  and
-
-  Subsections
-  -----------
-
-  and
-
-  Subsubsections
-  ^^^^^^^^^^^^^^
-
-  To add images, add the image file (png, svg or jpeg preferred) to the
-  _static/ directory. The reST syntax for adding the image is
-
-  .. figure:: /_static/filename.ext
-     :name: fig-label
-
-     Caption text.
-
-   Run: ``make html`` and ``open _build/html/index.html`` to preview your work.
-   See the README at https://github.com/lsst-sqre/lsst-technote-bootstrap or
-   this repo's README for more info.
-
-   Feel free to delete this instructional comment.
 
 :tocdepth: 1
 
@@ -52,6 +16,162 @@
 
 .. Add content here.
 .. Do not include the document title (it's automatically added from metadata.yaml).
+
+========
+Abstract
+========
+
+This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance for the LSST DRP and AP pipelines.
+
+It present defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and presents a brief introduction to some currently existing datasets.
+
+============
+Related Work
+============
+There is a draft test dataset document by Bellm, Bosch, Ivezic, Slater, and Wood-Vasey written as part of thinking by the DM Subsystem Science Team.
+That document was written more toward defining the specific datasets that can demonstrate that we pass tests in https://ls.st/LSE-61.
+
+This present document is written toward providing regular testing of KPMs and related metrics.  These are thus very related, but this present document focuses more on operational definitions.
+
+=========================
+Data Sets Types and Goals
+=========================
+1. CI
+    * Requirements
+        - Runs in 15 minutes total on 16 cores
+        - Good data that is expected to be successfully processed.
+        - Can be run by developer on an individual machine.
+    * Goals
+        - Test that key initial processing steps execute
+        - Allow checks for reasonable ranges of
+            - Numbers of stars
+            - Photometric zeropoints
+    * Steps
+        - ISR
+        - processCcd
+
+2. SMALL
+    * Requirements
+        - 1 hour on 16-32 cores
+        - Coadd at least 5 images
+        - Run image-image DIA
+    * Goals
+        - Fuller integrated testing
+        - Verify that DIA works
+        - Monitor quantities to 25%:
+            - Numbers of stars
+            - zeropoints
+            - KPMs
+            - Numbers of detected DIA sources.
+    * Steps
+        - ISR
+        - processCcd
+        - Coadd
+        - DIA
+        - Forced Photometry
+
+3. MEDIUM
+    * Requirements
+        - 8 hours on 64-128 cores
+        - At least 2 filters
+        - Coadd at least 5 images
+        - Run image-template DIA
+    * Goals
+        - Monitor Quantitative Performance to 10%, both static sky and DIA
+        - Include known edge cases
+        - Suitable for daily tracking of regression both in metrics and robustness.
+    * Steps
+        - ISR
+        - processCcd
+        - Coadd
+        - DIA
+        - Forced Photometry
+
+4. LARGE
+    * Goals
+        - 48 hours on 512 cores
+        - At least 3 filters
+        - Coadd at least 10 images/filter.
+        - Run image-template DIA for 5 epochs of same field.
+    * Goals
+        - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
+        - KPMs numbers should be suitable to predict full survey performance to ~50%
+        - Generate DRP/DPDD
+        - Allow testing of loading of data into DAX.
+    * Steps
+        - ISR
+        - processCcd
+        - Coadd
+        - DIA
+        - Forced Photometry
+        - Ingest of DRP data into database/DPDD structure
+
+===============
+Practical Notes
+===============
+Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets.  Such testing is certainly important and will be the subject of a separate effort, planning, and supporting documentation.
+
+Reference catalogs will be required.
+
+================
+Jenkins vs. NCSA
+================
+The above goals and dataset definitions are written with the NCSA Verification Cluster in mind.
+The current Jenkins AWS solution has a much smaller number of available cores than the NCSA Verification Cluster.  The limitations imposed by that mean that a more restricted set of minimal data will be necessary.  This more limited set of data may also be appropriate for use on an individual machine for direct developer testing for SMALL and MEDIUM scales.  The CI scale of data should also was be possible for a developer to manually run on an individual machine, whether that's at their desktop or NCSA.
+
+Such a more limited set of data might be generated by selecting just the overlapping detectors from the full visit IDs.  The goal is to maintain some significant overlap area for the coadds and DIA.
+
+===========
+Future Work
+===========
+1. Integrate with DM-SST document thinking
+2. DIA/AP.  Consult with UW group about current thinking
+3. Coordinate with CFHT experts to secure well-understood CFHT dataset.
+
+================
+Example Datasets
+================
+1. LARGE:
+    * The HSC PDR that is currently processed bi-weekly satisfies needs for LARGE datasets
+    * Modulo DIA
+
+2. MEDIUM:
+    a. DECam DES-SN fields.
+        - 10 fields from 2014 (DES Y2) in field SN-X3.
+        - g (no particular reason for this choice)
+        - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
+        - Available on lsst-dev in /datasets/des_sn
+
+    b. DECam HiTS
+        - See https://dmtn-039.lsst.io/
+        - Available on lsst-dev in /datasets/decam/_internal/hits
+        - Total of 2269 images available.
+        - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
+        - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
+          https://github.com/lsst/ap_verify_hits2015
+
+3. SMALL:
+    a. HSC Engineering data https://github.com/lsst/ci_hsc
+        - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
+        - Takes several hours when running on only a few cores.
+        - Not CI-sized under our current Jenkins/AWS node sizes, but would be CI sized large machine.
+    b. https://github.com/lsst/validation_data_hsc
+        - 51 GB.
+        - Calibration data available as pre-computed masters and used to do ISR.
+        - Currently processed on a daily (8 hour?) cadence through to coadd.
+        - Currently not used for DIA.
+
+4. CI
+    a. DECam HiTS
+        - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
+          https://github.com/lsst/ap_verify_ci_hits2015
+          This subset is only 3 visits and 2 CCDs per visit.
+          Presently (2018-08-15) the data are on a branch, not yet merged to master.
+    b. https://github.com/lsst/validation_data_decam, https://github.com/lsst/validation_data_cfht
+        - Each of these is part of CI and regularly used for simple execution testing.
+        - ISR is not performed.
+        - Nor is coadd or DIA, but those aren't requirements for a CI-scale dataset.
+
 
 .. .. rubric:: References
 
