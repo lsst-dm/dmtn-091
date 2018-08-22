@@ -134,42 +134,42 @@ Example Datasets
 1. LARGE:
     * The HSC PDR that is currently processed bi-weekly satisfies needs for Large datasets
     * Modulo
-      1. DIA
-      2. testing of ingestion of DRP data.
+        1. DIA
+        2. testing of ingestion of DRP data.
 
 2. MEDIUM:
     a. DECam DES-SN fields.
-      - 10 fields from 2014 (DES Y2) in field SN-X3.
-      - g (no particular reason for this choice)
-      - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
-      - Available on lsst-dev in /datasets/des_sn
+        - 10 fields from 2014 (DES Y2) in field SN-X3.
+        - g (no particular reason for this choice)
+        - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
+        - Available on lsst-dev in /datasets/des_sn
 
     b. DECam HiTS
-      - See https://dmtn-039.lsst.io/
-      - Available on lsst-dev in /datasets/decam/_internal/hits
-      - Total of 2269 images available.
-      - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
-      - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
-        https://github.com/lsst/ap_verify_hits2015
+        - See https://dmtn-039.lsst.io/
+        - Available on lsst-dev in /datasets/decam/_internal/hits
+        - Total of 2269 images available.
+        - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
+        - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
+          https://github.com/lsst/ap_verify_hits2015
 
 3. SMALL:
     a. validation_data_hsc
-      - 51 GB.
-      - Calibration data available as pre-computed masters and used to do ISR.
-      - Currently processed on a daily (8 hour?) cadence through to coadd.
-      - Currently not used for DIA.
+        - 51 GB.
+        - Calibration data available as pre-computed masters and used to do ISR.
+        - Currently processed on a daily (8 hour?) cadence through to coadd.
+        - Currently not used for DIA.
 
 4. CI
     a. HSC Engineering data "ci_hsc"
-      - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
-      - Takes several hours when running on only a few nodes.
+        - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
+        - Takes several hours when running on only a few nodes.
     b. DECam HiTS
-      - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
-        https://github.com/lsst/ap_verify_ci_hits2015
-        Presently (2018-08-15) the data are on a branch, not yet merged to master.
+        - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
+          https://github.com/lsst/ap_verify_ci_hits2015
+          Presently (2018-08-15) the data are on a branch, not yet merged to master.
     c. validation_data_decam, validation_data_cfht
-      - Each of these is part of CI and regularly used for simple execution testing.
-      - ISR is not performed.
+        - Each of these is part of CI and regularly used for simple execution testing.
+        - ISR is not performed.
 
 .. .. rubric:: References
 
