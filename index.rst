@@ -8,12 +8,6 @@
 
 .. TODO: Delete the note below before merging new content to the master branch.
 
-.. note::
-
-   **This technote is not yet published.**
-
-   Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
-
 .. Add content here.
 .. Do not include the document title (it's automatically added from metadata.yaml).
 
