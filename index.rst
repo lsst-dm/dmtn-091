@@ -132,10 +132,8 @@ Future Work
 Example Datasets
 ================
 1. LARGE:
-    * The HSC PDR that is currently processed bi-weekly satisfies needs for Large datasets
-    * Modulo
-        1. DIA
-        2. testing of ingestion of DRP data.
+    * The HSC PDR that is currently processed bi-weekly satisfies needs for LARGE datasets
+    * Modulo DIA
 
 2. MEDIUM:
     a. DECam DES-SN fields.
@@ -153,23 +151,27 @@ Example Datasets
           https://github.com/lsst/ap_verify_hits2015
 
 3. SMALL:
-    a. validation_data_hsc
+    a. HSC Engineering data https://github.com/lsst/ci_hsc
+        - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
+        - Takes several hours when running on only a few cores.
+        - Not CI-sized under our current Jenkins/AWS node sizes, but would be CI sized large machine.
+    b. https://github.com/lsst/validation_data_hsc
         - 51 GB.
         - Calibration data available as pre-computed masters and used to do ISR.
         - Currently processed on a daily (8 hour?) cadence through to coadd.
         - Currently not used for DIA.
 
 4. CI
-    a. HSC Engineering data "ci_hsc"
-        - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
-        - Takes several hours when running on only a few nodes.
-    b. DECam HiTS
+    a. DECam HiTS
         - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
           https://github.com/lsst/ap_verify_ci_hits2015
+          This subset is only 3 visits and 2 CCDs per visit.
           Presently (2018-08-15) the data are on a branch, not yet merged to master.
-    c. validation_data_decam, validation_data_cfht
+    b. https://github.com/lsst/validation_data_decam, https://github.com/lsst/validation_data_cfht
         - Each of these is part of CI and regularly used for simple execution testing.
         - ISR is not performed.
+        - Nor is coadd or DIA, but those aren't requirements for a CI-scale dataset.
+
 
 .. .. rubric:: References
 
