@@ -1,4 +1,22 @@
 ..
+
+:tocdepth: 1
+
+.. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
+
+.. sectnum::
+
+.. TODO: Delete the note below before merging new content to the master branch.
+
+.. note::
+
+   **This technote is not yet published.**
+
+   Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
+
+.. Add content here.
+.. Do not include the document title (it's automatically added from metadata.yaml).
+
 ========================================
 Test Datasets for Performance Monitoring
 ========================================
@@ -140,23 +158,6 @@ Example Datasets
     c. validation_data_decam, validation_data_cfht
       - Each of these is part of CI and regularly used for simple execution testing.
       - ISR is not performed.
-
-:tocdepth: 1
-
-.. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
-
-.. sectnum::
-
-.. TODO: Delete the note below before merging new content to the master branch.
-
-.. note::
-
-   **This technote is not yet published.**
-
-   Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
-
-.. Add content here.
-.. Do not include the document title (it's automatically added from metadata.yaml).
 
 .. .. rubric:: References
 
