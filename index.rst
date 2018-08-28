@@ -150,7 +150,7 @@ Example Datasets
         - Takes several hours when running on only a few cores.
         - Not CI-sized under our current Jenkins/AWS node sizes, but would be CI sized large machine.
     b. https://github.com/lsst/validation_data_hsc
-        - 51 GB.
+        - 366 GB.
         - Calibration data available as pre-computed masters and used to do ISR.
         - Currently processed on a daily (8 hour?) cadence through to coadd.
         - Currently not used for DIA.
