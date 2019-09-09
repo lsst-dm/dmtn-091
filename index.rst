@@ -30,7 +30,7 @@ Abstract
 
 This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance for the LSST DRP and AP pipelines.
 
-It present defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and presents a brief introduction to some currently existing datasets.
+It presently defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and provides a brief introduction to some currently existing datasets.
 
 ============
 Related Work
