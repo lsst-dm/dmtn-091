@@ -217,68 +217,75 @@ A (not yet identified) DECam dataset could potentially address all of these issu
 AP Test Datasets
 =================
 Summary recommendations:
-use a subset of HiTS for quick turnaround processing, smoke tests, etc.
-use a DES Deep SN field for large-scale processing
-use the DECam Bulge survey for crowded field tests
-take the DRP team's preference for an HSC field
-Desiderata for AP testing:
-tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
-the ability to exercise as many aspects of LSST pipelines and data products as possible
-public availability (so that we can feely recruit various LSST stakeholders)
-potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
-datasets should include at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
-at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
-at least one dataset should be from a camera without an ADC to test DCR
-probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras
-datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
-ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
-datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
-datasets with multiple filters will aid in understanding our DCR performance
-substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
-there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
-LSST-like cadences to test MOPS algorithms
-Candidate Datasets
-DECam
-HiTS
-already in use; see https://dmtn-039.lsst.io/
-up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
-DES SN fields
-8 shallow SN fields, 2 deep SN fields
-griz observation sequences obtained ~ weekly
-deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
-raw data available one year after taken–so in advance of the official DES releases
-DECam Bulge survey
-crowded stellar field
-Proposal ID 2013A-0719 (PI Saha)
-limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
-published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
-DECam NEO survey
-PI L. Allen
-320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
-3 seasons of data
-       2) HSC
-SSP Deep or Ultra-Deep:
-grizy; exposure times 3-5 minutes; tens of epochs available
-two UD fields and 15 deep fields
-Open Time observations from Yoshida
-tens of epochs over a couple of nights for a range of fields
-GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
-New Horizons
-crowded stellar field (Galactic Bulge)
-available to us (not fully public?); unclear details of numbers of epochs, etc.
-scientifically untapped
+ - use a subset of HiTS for quick turnaround processing, smoke tests, etc.
+ - use a DES Deep SN field for large-scale processing
+ - use the DECam Bulge survey for crowded field tests
+ - take the DRP team's preference for an HSC field
 
+Desiderata for AP testing:
+ - tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
+ - the ability to exercise as many aspects of LSST pipelines and data products as possible
+ - public availability (so that we can feely recruit various LSST stakeholders)
+ - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
+ - datasets should include at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
+ - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
+ - at least one dataset should be from a camera without an ADC to test DCR
+ - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras
+ - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
+ - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
+ - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
+ - datasets with multiple filters will aid in understanding our DCR performance
+ - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
+ - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
+ - LSST-like cadences to test MOPS algorithms
+
+==================
+Candidate Datasets
+==================
+
+1. DECam
+  * HiTS
+    - already in use; see https://dmtn-039.lsst.io/
+up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
+  * DES SN fields
+    - 8 shallow SN fields, 2 deep SN fields
+    - griz observation sequences obtained ~ weekly
+    - deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
+    - raw data available one year after taken–so in advance of the official DES releases
+  * DECam Bulge survey
+    - crowded stellar field
+    - Propoasal ID 2013A-0719 (PI Saha)
+    - limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
+    - published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
+  * DECam NEO survey
+    - PI L. Allen
+    - 320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
+    - 3 seasons of data
+2. HSC
+  * SSP Deep or Ultra-Deep:
+    - grizy; exposure times 3-5 minutes; tens of epochs available
+    - two UD fields and 15 deep fields
+    - Open Time observations from Yoshida
+    - tens of epochs over a couple of nights for a range of fields
+    - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
+  * New Horizons
+    - crowded stellar field (Galactic Bulge)
+    - available to us (not fully public?); unclear details of numbers of epochs, etc.
+    - scientifically untapped
+
+====================================
 Datasets considered but not selected
-CFHT
-SNLS
-CFHTLS-Deep
-Suitable, but no obvious reason to select CFHT over DECam?
-PTF
-Tens to thousands of epochs of public images available in two filters (g & R), but camera characteristics are markedly different–2"+ seeing, 1" pixels, and much shallower.
-ZTF
-Same sampling issues as PTF, and images will not be publicly available until 2019.
-DLS
-MOSAIC data. Has been processed through the stack (https://dmtn-063.lsst.io/), but obs_noao_mosaic is just a stub.
+====================================
+ * CFHT
+ * SNLS
+ * CFHTLS-Deep
+   - Suitable, but no obvious reason to select CFHT over DECam
+ * PTF
+   - Tens to thousands of epochs of public images available in two filters (g & R), but camera characteristics are markedly different–2"+ seeing, 1" pixels, and much shallower.
+ * ZTF
+   - Same sampling issues as PTF, and images will not be publicly available until 2019.
+ * DLS
+   - MOSAIC data. Has been processed through the stack (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera.
 
 
 .. .. rubric:: References
