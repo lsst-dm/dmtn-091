@@ -10,7 +10,7 @@
 
    **This technote is not yet published.**
 
-   Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
+   Planning out datatests for regular monitoring of the LSST DM Science Pipelines from continuous integration testing and regression monitoring through to large-scale performance reports.
 
 .. Add content here.
 .. Do not include the document title (it's automatically added from metadata.yaml).
