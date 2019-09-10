@@ -244,30 +244,39 @@ Candidate Datasets
 ==================
 
 1. DECam
+
   * HiTS
+
     - already in use; see https://dmtn-039.lsst.io/
-up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
+    - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
   * DES SN fields
     - 8 shallow SN fields, 2 deep SN fields
     - griz observation sequences obtained ~ weekly
     - deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
     - raw data available one year after taken–so in advance of the official DES releases
+
   * DECam Bulge survey
+
     - crowded stellar field
     - Propoasal ID 2013A-0719 (PI Saha)
     - limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
     - published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
+
   * DECam NEO survey
+
     - PI L. Allen
     - 320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
     - 3 seasons of data
+
 2. HSC
+
   * SSP Deep or Ultra-Deep:
     - grizy; exposure times 3-5 minutes; tens of epochs available
     - two UD fields and 15 deep fields
     - Open Time observations from Yoshida
     - tens of epochs over a couple of nights for a range of fields
     - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
+
   * New Horizons
     - crowded stellar field (Galactic Bulge)
     - available to us (not fully public?); unclear details of numbers of epochs, etc.
