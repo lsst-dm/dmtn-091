@@ -26,10 +26,8 @@ It presently defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and pr
 ============
 Related Work
 ============
-There is a draft test dataset document by Bellm, Bosch, Ivezic, Slater, and Wood-Vasey written as part of thinking by the DM Subsystem Science Team.
-That document was written more toward defining the specific datasets that can demonstrate that we pass tests in https://ls.st/LSE-61.
-
-This present document is written toward providing regular testing of KPMs and related metrics.  These are thus very related, but this present document focuses more on operational definitions.
+There is a detailed table of datasets and elements of https://ls.st/LSE-61 tested by each on the LSST Project Confluence.
+`Data sets used for DM Verification and Validation <https://confluence.lsstcorp.org/x/nYn4BQ>`_
 
 =========================
 Data Sets Types and Goals
@@ -109,7 +107,7 @@ Practical Notes
 ===============
 Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets.  Such testing is certainly important and will be the subject of a separate effort, planning, and supporting documentation.
 
-Reference catalogs will be required.
+Astrometric and photometric reference catalogs will be required for each dataset.
 
 ================
 Jenkins vs. NCSA
