@@ -8,15 +8,6 @@
 
 .. TODO: Delete the note below before merging new content to the master branch.
 
-=========
-Structure
-=========
-
-I. Dataset Types and Goals for Regular Processing and Monitoring
-II. Datasets Needs for DRP Verification
-III. Datasets Needs for AP Verficiation
-IV. Datasets Selectsion for DRP+AP Verification
-
    **This technote is not yet published.**
 
    Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
