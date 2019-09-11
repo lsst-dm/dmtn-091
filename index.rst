@@ -19,9 +19,11 @@
 Abstract
 ========
 
-This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance for the LSST DRP and AP pipelines.
+This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance for the LSST DRP and AP pipelines.  It does not cover datasets for testing the full DM system such as data acquisition, data transport, data loading, or the LSST Science Platform.
 
 It presently defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and provides a brief introduction to some currently existing datasets.
+
+It ends with a recommendation for a minimal set of datasets that would be suitable for performance monitoring, regression testing, and estimation of Key Performance Metrics for the LSST DM Science Pipelines.
 
 ============
 Related Work
