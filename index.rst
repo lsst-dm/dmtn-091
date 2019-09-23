@@ -25,6 +25,14 @@ It presently defines guidelines for CI, SMALL, MEDIUM, and LARGE datasets and pr
 
 It ends with a recommendation for a minimal set of datasets that would be suitable for performance monitoring, regression testing, and estimation of Key Performance Metrics for the LSST DM Science Pipelines.
 
+=================
+Executive Summary
+=================
+
+1. DRP Scientific Performance Monitoring can be primarily accomplished through HSC RC2 dataset from the SSP survey.  This needs to be supplemented by likely HSC observations in crowded fields.
+2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey *plus* an additional high-cadence multi-band survey.
+3. Datasets for CI-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  These datasets are largely extant and being regularly tested and monitored in SQuaSH.
+
 ============
 Related Work
 ============
@@ -110,7 +118,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 ===============
 Practical Notes
 ===============
-Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets for CI, SMALL, and MEDIUM datasets.  Such testing is certainly important and will be the subject of a separate effort, planning, and supporting documentation.
+Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets for CI, SMALL, and MEDIUM datasets.  Such generation is suitable for processing with LARGE datasets, but full testing of calibration should be the subject of a separate effort, planning, and supporting documentation.
 
 Astrometric and photometric reference catalogs will be required for each dataset.
 
@@ -134,12 +142,12 @@ DRP Test Datasets
 
 The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales:
 
-`ci_hsc`
-========
+ci_hsc
+======
 The `ci_hsc` package (https://github.com/lsst/ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data totals 8.3G, and is comprised of 33 raw images from 12 HSC visits in r and i band, pre-made master darks, flats, and biases for these, and the necessary subset of the PS1-PV3 reference catalog.  `ci_hsc` is run automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
-`HSC RC2`
-=========
+HSC RC2
+=======
 The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is  processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `meas_mosaic`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots.  Processing currently requires considerable manual supervisions, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset.
 
 This is presently (2019-09-10) available at NCSA at `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket:
@@ -191,7 +199,7 @@ UD_COSMOS   9813    NB0921  28        23038^23040^23042^23044^23046^23048^23050^
 UD_COSMOS   9813    TOTAL   177       Size: 3.2 TB
 =========   =====   ======  ========= ==========
 
-This dataset almost satisfies the definition above for a MEDIUM dataset.  The important caveat is that this dataset is _not_ designed for testing performance of Difference Image Analysis.  It does have multiple observations of some fields, and it could be adapted to such a purpose.  But the DECam HiTS dataset is an important complement; particularly because HiTS provides an externally-analyzed comparison for the variable and transient sources.
+This dataset almost satisfies the definition above for a MEDIUM dataset.  The important deviation is that this dataset is _not_ designed for testing performance of Difference Image Analysis.  It does have multiple observations of some fields, and it could be adapted to such a purpose.  But the DECam HiTS dataset is an important complement; particularly because HiTS provides an externally-analyzed comparison for the variable and transient sources.
 
 HSC PDR1
 ========
@@ -203,6 +211,7 @@ DESIRED DATASETS
 ================
 In the future, there are at least two additional dataset scales that would be useful:
 
+** [BOSCH:] UPDATE jointcal section to reflect 2019 understanding **
 1. Running `jointcal`
 The minimum set necessary to run `meas_mosaic` or `jointcal`, which is the only major processing step that cannot be exercised by `ci_hsc` (because those typically require full visits, or at least large fractions of visits).  This *may* now be what's contained in the `validate_drp` package, but it is possible that some difficulties in jointcal development may be due to unusual properties or some kind of incompleteness in that dataset.  The scale of data necessary for minimal `jointcal` testing may also increase as the complexity of the algorithm is expanded.  If we can reduce the latency of CI-initiated processing by giving the CI system access to more cores, it may be most useful to just expand `ci_hsc` to be able to include `meas_mosaic` and `jointcal`.
 
@@ -210,11 +219,13 @@ The minimum set necessary to run `meas_mosaic` or `jointcal`, which is the only 
 Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
 3. Missing Features
-Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC PDR1:
+Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC PDR1 and RC2:
 
  - Variability on different timescales (for most PDR1 data, all images in a particular region with the same band are observed in the same night).
+[MWV: I believe RC2 includes more observations of the same field on different nights.]
 
  - Usage of the new r- and i-band filters (having multiple versions of the same filter is for algorithmic purposes often analogous to having sensors with different wavelength responses, as in LSST's hybrid focal plane).
+[MWV: I believe RC2 satisfies the new-filter desire.]
 
  - Differential chromatic refraction (HSC has an atmospheric dispersion corrector).
 
@@ -222,7 +233,7 @@ Five important data features are missed in all of the datasets described above, 
 
  - Crowded stellar fields.
 
-A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g., physically-motivated PSF modeling).  Many non-PDR1 HSC datasets do include more interesting variability (as will PDR2, when available) and/or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from ComCam or even the full LSST camera are available.
+A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g., physically-motivated PSF modeling).  Many non-PDR1+RC2 HSC datasets do include more interesting variability or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from ComCam or even the full LSST camera are available.
 
 
 =================
