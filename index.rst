@@ -118,11 +118,14 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 ===============
 Practical Notes
 ===============
+
+Calibration
+===========
+
 Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets for CI, SMALL, and MEDIUM datasets.  Such generation is suitable for processing with LARGE datasets, but full testing of calibration should be the subject of a separate effort and planning and additional supporting documentation.
 
 Astrometric and photometric reference catalogs will be required for each dataset.
 
-================
 Jenkins vs. NCSA
 ================
 The above goals and dataset definitions are written with the NCSA Verification Cluster in mind.
@@ -136,12 +139,33 @@ DRP Test Datasets
 
 The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales: testdata_ci_hsc, HSC RC2, and HSC PDR1.
 
-testdata_ci_hsc
-===============
+CI
+==
+1. validation_data_{cfht,decam}
+
+
+The are "validation_data" CI-sized data sets for each of CFHT and DECam.  These are
+  https://github.com/lsst/validation_data_decam
+  https://github.com/lsst/validation_data_cfht
+Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repository also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
+
+2. testdata_ci_hsc
+
 The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 raw images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
-HSC RC2
-=======
+SMALL
+=====
+1. https://github.com/lsst/validation_data_hsc
+    - 56 GB raw + master calibrations.
+    - The entire `validation_data_hsc` repo is 250 GB because it includes a set of processCcd+coadd processed data.
+    - Calibration data available as pre-computed masters and used to do ISR.
+    - Currently processed on a daily (8 hour?) cadence through to coadd.
+    - Currently not used for DIA.
+
+MEDIUM
+======
+1. HSC RC2
+
 The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is  processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset.
 
 The HSC RC2 data is presently (2019-09-10) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket:
@@ -193,25 +217,27 @@ UD_COSMOS   9813    NB0921  28        23038^23040^23042^23044^23046^23048^23050^
 UD_COSMOS   9813    TOTAL   177       Size: 3.2 TB
 =========   =====   ======  ========= ==========
 
-This dataset almost satisfies the definition above for a MEDIUM dataset.  The important exception is that this dataset is _not_ designed for testing performance of Difference Image Analysis.  It does have multiple observations of some fields, and it could be adapted to such a purpose.  But the DECam HiTS dataset discussed below is an important complement; particularly because HiTS provides an externally-analyzed comparison for the variable and transient sources.
+This dataset satisfies the definition above for a MEDIUM dataset.
 
-HSC SSP PDR1 and PDR2
-=====================
+LARGE
+=====
+1. HSC SSP PDR1 and PDR2
+
 The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
  - `Cycle S17 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S17B+HSC+PDR1+reprocessing>`_
  - `Cycle S18 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S18+HSC+PDR1+reprocessing/>`_
 
- The HSC Public Data Release 2 (PDR2) dataset was released by HSC in the Summer of 2019.  This dataset has been copied to NCSA and is now available at `/datasets/hsc/raw/ssp_pdr2`.  It is appropriate for DRP and for AP testing and performance monitoring.
+ The HSC Public Data Release 2 (PDR2) dataset was released by HSC in the Summer of 2019.  This dataset has been copied to NCSA and is now available at `/datasets/hsc/raw/ssp_pdr2`.  It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
 
 DESIRED DATASETS
 ================
 In the future, there are at least two additional dataset scales that would be useful:
 
-2. Less Large LARGE
+1. Less Large LARGE
 Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
-3. Missing Features
-Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
+2. Missing Features
+Three important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
  - Differential chromatic refraction (HSC has an atmospheric dispersion corrector).
 
@@ -221,117 +247,107 @@ Five important data features are missed in all of the datasets described above, 
 
 A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g., physically-motivated PSF modeling).  Many non-PDR1/2+RC2 HSC datasets do include more interesting variability or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from ComCam or even the full LSST camera are available.
 
+DRP Summary
+===========
+CI, SMALL, MEDIUM, and LARGE datasets exist suitable for significant amount of Science Pipelines performance monitoring.  The addition of a dataset on a crowded field would help exercise a key portion of the Science Pipelines that currently is uncertain.  Technical investigations of (1) using wavefront-sensor data and (2) a system without an ADC may wait until commissioning data is available from ComCam or the full LSSTCam.
 
 =================
 AP Test Datasets
 =================
 Summary recommendations:
- - use a subset of HiTS for quick turnaround processing, smoke tests, etc.
- - Select a subset of HSC SSP PDR1 vs PDR2
- - use a DES Deep SN field for large-scale processing
- - use the DECam Bulge survey for crowded field tests
+  1. use a subset of HiTS for quick turnaround processing, smoke tests, etc.  DONE.
+  2. use the DECam Bulge survey for crowded field tests.  IN PROGRESS.
+  3. Select a subset of HSC SSP PDR1 vs PDR2.  TICKET OPEN.
+  4. use a DES Deep SN field for large-scale processing.
 
 Desiderata for AP testing:
- - tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
- - the ability to exercise as many aspects of LSST pipelines and data products as possible
- - public availability (so that we can feely recruit various LSST stakeholders)
- - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
- - datasets should include at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
- - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
- - at least one dataset should be from a camera without an ADC to test DCR.  * This is currently unmet *.
- - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this, but do not satisfy the no ADC optios.
- - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
- - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
- - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
- - datasets with multiple filters will aid in understanding our DCR performance
- - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
- - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
- - LSST-like cadences to test MOPS algorithms
+  - tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
+  - the ability to exercise as many aspects of LSST pipelines and data products as possible
+  - public availability (so that we can feely recruit various LSST stakeholders)
+  - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
+  - We should have datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
+  - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
+  - at least one dataset should be from a camera without an ADC to test DCR.  * This is currently unmet *.
+  - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this, but do not satisfy the no ADC optios.
+  - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
+  - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
+  - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
+  - datasets with multiple filters will aid in understanding our DCR performance
+  - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
+  - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
+  - LSST-like cadences to test Solar System Orbit algorithms
+
+CI
+==
+1. DECam HiTS
+    - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
+      https://github.com/lsst/ap_verify_ci_hits2015
+    This subset is only 3 visits and 2 CCDs per visit.
+    Presently (2018-08-15) the data are on a branch, not yet merged to master.
+
+SMALL
+=====
+1. DECam HiTS
+    - See https://dmtn-039.lsst.io/
+    - Available on lsst-dev in `/datasets/decam/_internal/hits`
+    - Total of 2269 images available.
+    - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
+    - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
+    - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
+      https://github.com/lsst/ap_verify_hits2015
+
+MEDIUM
+======
+1. HSC SSP PDR1+PDR2
+    - Planned work to build templates from PDR1 and then run subtractions from the new data in PDR2 from later years.
+    https://jira.lsstcorp.org/browse/DM-20559
+    https://jira.lsstcorp.org/browse/DM-20560
+
+It's less clear that it's important to do active regular testing of DIA on LARGE datasets.  MEDIUM should be sufficient to characterize the key science performance goals.
 
 
-
-==================
-Candidate Datasets
-==================
-
-1. CI
-    a. DECam HiTS
-        - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
-          https://github.com/lsst/ap_verify_ci_hits2015
-          This subset is only 3 visits and 2 CCDs per visit.
-          Presently (2018-08-15) the data are on a branch, not yet merged to master.
-    b. https://github.com/lsst/validation_data_decam, https://github.com/lsst/validation_data_cfht
-        - Each of these is part of CI and regularly used for simple execution testing.
-        - ISR is not performed.
-        - Nor is coadd or DIA, but those aren't requirements for a CI-scale dataset.
-
-2. SMALL:
-    a. HSC Engineering data https://github.com/lsst/ci_hsc
-        - 8 GB of data.  Runs through single-frame, coadd, and forced photometry.
-        - Takes several hours when running on only a few cores.
-        - Not CI-sized under our current Jenkins/AWS node sizes, but would be CI sized large machine.
-    b. https://github.com/lsst/validation_data_hsc
-        - 56 GB raw + master calibrations.
-        - The entire `validation_data_hsc` repo is 250 GB because it includes a set of processCcd+coadd processed data.
-        - Calibration data available as pre-computed masters and used to do ISR.
-        - Currently processed on a daily (8 hour?) cadence through to coadd.
-        - Currently not used for DIA.
-
-3. DECam
-
-DECam HiTS
-==========
-        - See https://dmtn-039.lsst.io/
-        - Available on lsst-dev in `/datasets/decam/_internal/hits`
-        - Total of 2269 images available.
-        - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
-        - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
-        - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
-          https://github.com/lsst/ap_verify_hits2015
-
+AP Candidate Additional Datasets
+================================
+1. DECam
   * DES SN fields
     - 8 shallow SN fields, 2 deep SN fields
     - griz observation sequences obtained ~ weekly
     - deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
-    - raw data available one year after taken–so in advance of the official DES releases
+    - Raw data are public
     - 10 fields from 2014 (DES Y2) in field SN-X3.
     - g (no particular reason for this choice)
     - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
     - Available on lsst-dev in `/datasets/des_sn`
 
+2. HSC New Horizons
+    - crowded stellar field (Galactic Bulge)
+    - available to us (not fully public?); unclear details of numbers of epochs, etc.
+    - scientifically untapped
+    - Available on lsst-dev at `/datasets/hsc/raw/newhorizons/`
 
-  * DECam Bulge survey
-
+3. DECam Bulge survey
     - crowded stellar field
     - Propoasal ID 2013A-0719 (PI Saha)
     - limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
     - published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
 
-  * DECam NEO survey
-
+4. DECam NEO survey
     - PI L. Allen
     - 320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
     - 3 seasons of data
 
-2. HSC
-
-  * SSP Deep or Ultra-Deep:
+5. HSC SSP Deep or Ultra-Deep:
     - grizy; exposure times 3-5 minutes; tens of epochs available
     - two UD fields and 15 deep fields
     - Open Time observations from Yoshida
     - tens of epochs over a couple of nights for a range of fields
     - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
 
-  * New Horizons
-    - crowded stellar field (Galactic Bulge)
-    - available to us (not fully public?); unclear details of numbers of epochs, etc.
-    - scientifically untapped
 
 ====================================
 Datasets considered but not selected
 ====================================
- * CFHT
- * SNLS
+ * CFHT-SNLS
    - Suitable for some AP performance.  But reason to select CFHT over DECam.
  * CFHTLS-Deep
    - Suitable, but no obvious reason to select CFHT over DECam
