@@ -293,6 +293,7 @@ Candidate Datasets
         - Each of these is part of CI and regularly used for simple execution testing.
         - ISR is not performed.
         - Nor is coadd or DIA, but those aren't requirements for a CI-scale dataset.
+
 1. DECam
 
 DECam HiTS
@@ -348,14 +349,15 @@ Datasets considered but not selected
 ====================================
  * CFHT
  * SNLS
+   - Suitable for some AP performance.  But reason to select CFHT over DECam.
  * CFHTLS-Deep
    - Suitable, but no obvious reason to select CFHT over DECam
  * PTF
    - Tens to thousands of epochs of public images available in two filters (g & R), but camera characteristics are markedly different–2"+ seeing, 1" pixels, and much shallower.
  * ZTF
-   - Same sampling issues as PTF, and images will not be publicly available until 2019.
+   - Same sampling issues as PTF.
  * DLS
-   - MOSAIC data. Has been processed through the stack (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera.
+   - MOSAIC data.  Was processed through the DM Science Pipelines one (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
 
 
 .. .. rubric:: References
