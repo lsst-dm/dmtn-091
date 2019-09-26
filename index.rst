@@ -29,14 +29,14 @@ It ends with a recommendation for a minimal set of datasets that would be suitab
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through HSC RC2 dataset from the SSP survey supplemented by less frequent processing of HSC PDR2.  This needs to be supplemented by likely HSC observations in crowded fields.
-2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC PRD2-PDR1 *plus* an additional high-cadence multi-band survey.
-3. Datasets for CI-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested and monitored in SQuaSH.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through HSC RC2 dataset from the SSP survey supplemented by less frequent processing of much larger HSC PDR2.  This needs to be supplemented by HSC observations in crowded fields.
+2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
+3. Datasets for CI-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
 
 ============
 Related Work
 ============
-There is a detailed table of datasets and elements of https://ls.st/LSE-61 tested by each on the LSST Project Confluence.  The table there aims to cover all aspects of the DM system, not just the Science Pipelines focus on this present tech note.
+There is a detailed Confluence table of datasets and elements of https://ls.st/LSE-61 tested by each on the LSST Project Confluence.  The table there aims to cover all aspects of the DM system, not just the Science Pipelines focus on this present tech note.
 `Data sets used for DM Verification and Validation <https://confluence.lsstcorp.org/x/nYn4BQ>`_
 
 =========================
@@ -126,17 +126,15 @@ Astrometric and photometric reference catalogs will be required for each dataset
 Jenkins vs. NCSA
 ================
 The above goals and dataset definitions are written with the NCSA Verification Cluster in mind.
-The current Jenkins AWS solution has a much smaller number of available cores than the NCSA Verification Cluster.  The limitations imposed by that mean that the CI and SMALL datasets are suited to Jenkins.  It would be possible to do occasional MEDIUM runs through Jenkins, but it's likely more efficient to run them at NCSA.
+The current Jenkins AWS solution has a much smaller number of available cores than the NCSA Verification Cluster.  These limitations mean that the CI and SMALL datasets are suited to Jenkins.  It would be _possible_ to do occasional MEDIUM runs through Jenkins, but it's likely more efficient to run them at NCSA.
 
 The CI scale of data should also was be possible for a developer to manually run on an individual machine, whether that's at their desktop or NCSA.
-This more limited set of data may also be appropriate for use on an individual machine for direct developer testing for SMALL and MEDIUM scales.
-
 
 =================
 DRP Test Datasets
 =================
 
-The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales:
+The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales: testdata_ci_hsc, HSC RC2, and HSC PDR1.
 
 testdata_ci_hsc
 ===============
@@ -197,13 +195,13 @@ UD_COSMOS   9813    TOTAL   177       Size: 3.2 TB
 
 This dataset almost satisfies the definition above for a MEDIUM dataset.  The important exception is that this dataset is _not_ designed for testing performance of Difference Image Analysis.  It does have multiple observations of some fields, and it could be adapted to such a purpose.  But the DECam HiTS dataset discussed below is an important complement; particularly because HiTS provides an externally-analyzed comparison for the variable and transient sources.
 
-HSC PDR1 and PDR2
-=================
-The full HSC Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
+HSC SSP PDR1 and PDR2
+=====================
+The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
  - `Cycle S17 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S17B+HSC+PDR1+reprocessing>`_
  - `Cycle S18 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S18+HSC+PDR1+reprocessing/>`_
 
- The HSC Public Data Release 2 (PDR2) dataset is now available and copied to  NCSA.  It is appropriate for DRP and for AP testing and performance monitoring.
+ The HSC Public Data Release 2 (PDR2) dataset was released by HSC in the Summer of 2019.  This dataset has been copied to NCSA and is now available at `/datasets/hsc/raw/ssp_pdr2`.  It is appropriate for DRP and for AP testing and performance monitoring.
 
 DESIRED DATASETS
 ================
@@ -213,7 +211,7 @@ In the future, there are at least two additional dataset scales that would be us
 Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
 3. Missing Features
-Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC PDR1/2 and RC2:
+Five important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
  - Differential chromatic refraction (HSC has an atmospheric dispersion corrector).
 
@@ -229,7 +227,7 @@ AP Test Datasets
 =================
 Summary recommendations:
  - use a subset of HiTS for quick turnaround processing, smoke tests, etc.
- - Select a subset of HSC PDR1 vs PDR2
+ - Select a subset of HSC SSP PDR1 vs PDR2
  - use a DES Deep SN field for large-scale processing
  - use the DECam Bulge survey for crowded field tests
 
