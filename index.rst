@@ -212,6 +212,9 @@ DESIRED DATASETS
 In the future, there are at least two additional dataset scales that would be useful:
 
 ** [BOSCH:] UPDATE jointcal section to reflect 2019 understanding **
+## Discussion with Bosch:
+## OK.  So we should rephrase the discussion above to say that we will run jointcal at the CI level to make sure it still runs.
+## But that it will not be meant to have actual performance-level meaning.
 1. Running `jointcal`
 The minimum set necessary to run `meas_mosaic` or `jointcal`, which is the only major processing step that cannot be exercised by `ci_hsc` (because those typically require full visits, or at least large fractions of visits).  This *may* now be what's contained in the `validate_drp` package, but it is possible that some difficulties in jointcal development may be due to unusual properties or some kind of incompleteness in that dataset.  The scale of data necessary for minimal `jointcal` testing may also increase as the complexity of the algorithm is expanded.  If we can reduce the latency of CI-initiated processing by giving the CI system access to more cores, it may be most useful to just expand `ci_hsc` to be able to include `meas_mosaic` and `jointcal`.
 
