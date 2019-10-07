@@ -251,12 +251,12 @@ Desiderata for AP testing:
   - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
   - We should have datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
   - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
-  - at least one dataset should be from a camera without an ADC to test DCR.  * This is currently unmet *.
-  - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this, but do not satisfy the no ADC optios.
+  - at least one dataset should be from a camera without an ADC to test DCR.
+  - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this.
   - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
   - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
   - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
-  - datasets with multiple filters will aid in understanding our DCR performance
+  - datasets with multiple filters will aid in understanding our DCR performance and are more representative of LSST data.
   - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
   - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
   - LSST-like cadences to test Solar System Orbit algorithms
@@ -267,12 +267,10 @@ CI
     - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
       https://github.com/lsst/ap_verify_ci_hits2015
     This subset is only 3 visits and 2 CCDs per visit.
-    Presently (2018-08-15) the data are on a branch, not yet merged to master.
 
 SMALL
 =====
 1. DECam HiTS
-    - See https://dmtn-039.lsst.io/
     - Available on lsst-dev in `/datasets/decam/_internal/hits`
     - Total of 2269 images available.
     - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
@@ -287,7 +285,7 @@ MEDIUM
     https://jira.lsstcorp.org/browse/DM-20559
     https://jira.lsstcorp.org/browse/DM-20560
 
-It's less clear that it's important to do active regular testing of DIA on LARGE datasets.  MEDIUM should be sufficient to characterize the key science performance goals.
+It's less clear that it's feasible to do active regular testing of DIA on LARGE datasets.  MEDIUM should be sufficient to characterize the key science performance goals.
 
 
 AP Candidate Additional Datasets
@@ -300,7 +298,7 @@ AP Candidate Additional Datasets
     - 10 fields from 2014 (DES Y2) in field SN-X3.
     - g (no particular reason for this choice)
     - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
-    - Available on lsst-dev in `/datasets/des_sn`
+    - Available on lsst-dev in `/datasets/des_sn/repo_Y2`
 
 2. HSC New Horizons
     - crowded stellar field (Galactic Bulge)
@@ -331,15 +329,15 @@ AP Candidate Additional Datasets
 Datasets considered but not selected
 ====================================
  * CFHT-SNLS
-   - Suitable for some AP performance.  But reason to select CFHT over DECam.
+   - Suitable for some AP performance.  But no obvious reason to select CFHT over DECam.
  * CFHTLS-Deep
    - Suitable, but no obvious reason to select CFHT over DECam
  * PTF
    - Tens to thousands of epochs of public images available in two filters (g & R), but camera characteristics are markedly different–2"+ seeing, 1" pixels, and much shallower.
  * ZTF
-   - Same sampling issues as PTF.
+   - Same sampling issues as PTF.  `obs_ztf` exists, but has not been thoroughly tested.  Not all desired calibration products are presently (2019-10-07) publicly available.
  * DLS
-   - MOSAIC data.  Was processed through the DM Science Pipelines one (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
+   - MOSAIC data.  Was processed through the DM Science Pipelines once (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
 
 
 ============
