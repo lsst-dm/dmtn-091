@@ -19,30 +19,30 @@
 Abstract
 ========
 
-This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance for the LSST DRP and AP pipelines.  It does not cover datasets for testing the full DM system such as data acquisition, data transport, data loading, or the LSST Science Platform.
+This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance of the LSST DRP and AP pipelines.  It does not cover datasets for testing the full DM system such as data acquisition, data transport, data loading, or the LSST Science Platform.
 
-We start with a summary recommendation for a minimal set of datasets that would be suitable for performance monitoring, regression testing, and estimation of Key Performance Metrics for the LSST DM Science Pipelines.
-We next define guidelines for CI, SMALL, MEDIUM, and LARGE datasets.
+We start with a summary recommendation for a minimal set of datasets that would be suitable for performance monitoring, regression testing, and estimation of Key Performance Metrics (KPMs) for the LSST DM Science Pipelines.
+We next define and provide guidelines for the processing workflow and cadence, and monitoring and assessment of test datasets divided into groups.  We refer to these groups as CI, SMALL, MEDIUM, and LARGE datasets.
 We finally present more detailed discussion of the existing and near-future planned datasets for DRP and AP Science Performance monitoring.
 
 =================
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through HSC RC2 dataset from the SSP survey supplemented by less frequent processing of much larger HSC PDR2.  This needs to be supplemented by HSC observations in crowded fields.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2.  This needs to be supplemented by HSC observations in crowded fields.
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
-3. Datasets for CI-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
+3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
 
 
-=========================
-Data Sets Types and Goals
-=========================
+=======================
+Dataset Types and Goals
+=======================
 
 We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant to span a range of computational requirements, response time, and fidelity of performance measurements.
 
 1. CI
     * Requirements
-        - Runs in 15 minutes total on 16 cores
+        - Runs less than 15 minutes wall time on 16 cores
         - Good data that is expected to be successfully processed.
         - Can be run by developer on an individual machine.
     * Goals
@@ -51,8 +51,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
             - Numbers of stars
             - Photometric zeropoints
     * Steps
-        - ISR
-        - processCcd
+        - Instrument-Signature Removal
+        - Single-Frame Processing
 
 2. SMALL
     * Requirements
@@ -68,27 +68,27 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
             - KPMs
             - Numbers of detected DIA sources.
     * Steps
-        - ISR
-        - processCcd
+        - Instrument-Signature Removal
+        - Single-Frame Processing
         - Coadd
-        - DIA
+        - Difference Image Analysis
         - Forced Photometry
 
 3. MEDIUM
     * Requirements
         - 8 hours on 64-128 cores
         - At least 2 filters
-        - Coadd at least 5 images
+        - Coadd at least 5 images per filter
         - Run image-template DIA
     * Goals
-        - Monitor Quantitative Performance to 10%, both static sky and DIA
+        - Monitor quantities to 10%, both static sky and DIA
         - Include known edge cases
         - Suitable for daily tracking of regression both in metrics and robustness.
     * Steps
-        - ISR
-        - processCcd
+        - Instrument-Signature Removal
+        - Single-Frame Processing
         - Coadd
-        - DIA
+        - Difference Image Analysis
         - Forced Photometry
 
 4. LARGE
@@ -103,10 +103,10 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Generate DRP/DPDD
         - Allow testing of loading of data into DAX.
     * Steps
-        - ISR
-        - processCcd
+        - Instrument-Signature Removal
+        - Single-Frame Processing
         - Coadd
-        - DIA
+        - Difference Image Analysis
         - Forced Photometry
         - Ingest of DRP data into database/DPDD structure
 
@@ -121,10 +121,10 @@ CI
 ==
 1. validation_data_{cfht,decam}
 
-   There are "validation_data" CI-sized data sets for each of CFHT and DECam (and HSC, see next section).  These are
+   There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HSC, see next section).  These are
      https://github.com/lsst/validation_data_decam
-     https://github.com/lsst/validation_data_cfht
-   Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repository also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
+     https://github.com/lsst/validation_data_cfht  
+   Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repositories also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
 
 2. testdata_ci_hsc
 
@@ -134,7 +134,7 @@ SMALL
 =====
 1. https://github.com/lsst/validation_data_hsc
     - 56 GB raw + master calibrations.
-    - The entire `validation_data_hsc` repo is 250 GB because it includes a set of processCcd+coadd processed data.
+    - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data.
     - Calibration data available as pre-computed masters and used to do ISR.
     - Currently processed on a daily (8 hour?) cadence through to coadd.
     - Currently not used for DIA.
@@ -147,9 +147,9 @@ MEDIUM
 
    The HSC RC2 data is presently (2019-09-10) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
-   Lauren MacArthur spent significant time into the defining this dataset to consist of both mostly good data plus some specific known more challenging cases.  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a full set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
+   Particular attention was paid in defining this datasets for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
-   The bi-weekly processing of this dataset is tracked at:
+   The monthly processing of this dataset is tracked at:
    `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_
 
    The DM Tech Note
@@ -208,7 +208,14 @@ LARGE
     * `Cycle S17 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S17B+HSC+PDR1+reprocessing>`_
     * `Cycle S18 HSC PDR1 Processing <https://confluence.lsstcorp.org/display/DM/S18+HSC+PDR1+reprocessing/>`_
 
-  The HSC Public Data Release 2 (PDR2) dataset was released by HSC in the Summer of 2019.  This dataset has been copied to NCSA and is now available at `/datasets/hsc/raw/ssp_pdr2`.  It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
+  The HSC Public Data Release 2 (PDR2) dataset was released by HSC in the Summer of 2019.  This dataset is being copied to NCSA and will be available at `/datasets/hsc/raw/ssp_pdr2`.  PDR2
+     * Contains 5654 visits in 7 bands (grizy plus two narrow-band filters)
+     * Covers 119 tracts
+     * Data from 3 survey tiers: WIDE, DEEP, UDEEP
+     * Is 13 times larger that RC2.
+     * Takes 80,000 core hours.  80% of this is spent in the full multiband processing.
+
+     It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
 
 DESIRED DATASETS
 ================
@@ -249,16 +256,15 @@ Desiderata for AP testing:
   - the ability to exercise as many aspects of LSST pipelines and data products as possible
   - public availability (so that we can feely recruit various LSST stakeholders)
   - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
-  - We should have datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
+  - datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
   - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
-  - at least one dataset should be from a camera without an ADC to test DCR.
+  - at least one dataset should be in multiple filters from a camera without an ADC to test DCR.
   - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this.
   - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
   - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
   - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
-  - datasets with multiple filters will aid in understanding our DCR performance and are more representative of LSST data.
   - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
-  - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey times as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
+  - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey teams as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand, well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
   - LSST-like cadences to test Solar System Orbit algorithms
 
 CI
@@ -363,13 +369,13 @@ Jenkins vs. NCSA
 The above goals and dataset definitions are written with the NCSA Verification Cluster in mind.
 The current Jenkins AWS solution has a much smaller number of available cores than the NCSA Verification Cluster.  These limitations mean that the CI and SMALL datasets are suited to Jenkins.  It would be _possible_ to do occasional MEDIUM runs through Jenkins, but it's likely more efficient to run them at NCSA.
 
-The CI scale of data should also was be possible for a developer to manually run on an individual machine, whether that's at their desktop or NCSA.
+The CI scale of data should also be possible for a developer to manually run on an individual machine, whether that's at their desktop or NCSA.
 
 ===========
 Future Work
 ===========
 1. Specify as-realized datasets on disk based on these recommendations.
-2. Update discussion of `processCcd` to reflect Gen3 Task names and divisions.
+2. Update discussion of `single-frame processing` to reflect Gen3 Task names and divisions.
 
 .. .. rubric:: References
 
