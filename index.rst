@@ -376,10 +376,13 @@ The current Jenkins AWS solution has a much smaller number of available cores th
 
 The CI scale of data should also be possible for a developer to manually run on an individual machine, whether that's at their desktop or NCSA.
 
+October, 2019: Jenkins is now running at the LDF in the same configuration of a Kubernetes cluster at the LDF.  Those pods created could have access to the shared datasystem on the LDF.
+
 ===========
 Future Work
 ===========
 1. Specify as-realized datasets on disk based on these recommendations.
+
 
 .. .. rubric:: References
 
