@@ -380,7 +380,6 @@ The CI scale of data should also be possible for a developer to manually run on 
 Future Work
 ===========
 1. Specify as-realized datasets on disk based on these recommendations.
-2. Update discussion of `single-frame processing` to reflect Gen3 Task names and divisions.
 
 .. .. rubric:: References
 
