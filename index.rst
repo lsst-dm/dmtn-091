@@ -57,7 +57,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 2. SMALL
     * Requirements
         - 1 hour on 16-32 cores
-        - Coadd at least 5 images
+        - Coadd at least 5 detectors
         - Run image-image DIA
     * Goals
         - Fuller integrated testing
@@ -78,7 +78,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     * Requirements
         - 8 hours on 64-128 cores
         - At least 2 filters
-        - Coadd at least 5 images per filter
+        - Coadd at least 5 full focal-plane images per filter
         - Run image-template DIA
     * Goals
         - Monitor quantities to 10%, both static sky and DIA
@@ -88,6 +88,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Instrument-Signature Removal
         - Single-Frame Processing
         - Coadd
+        - Multiband detection, merging, and measurement
         - Difference Image Analysis
         - Forced Photometry
 
@@ -95,7 +96,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     * Goals
         - 48 hours on 512 cores
         - At least 3 filters
-        - Coadd at least 10 images/filter.
+        - Coadd at least 10 full focal-plane images/filter.
         - Run image-template DIA for 5 epochs of same field.
     * Goals
         - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
@@ -106,6 +107,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Instrument-Signature Removal
         - Single-Frame Processing
         - Coadd
+        - Multiband detection, merging, and measurement
         - Difference Image Analysis
         - Forced Photometry
         - Ingest of DRP data into database/DPDD structure
@@ -128,7 +130,7 @@ CI
 
 2. testdata_ci_hsc
 
-   The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 raw images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
+   The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
 SMALL
 =====
@@ -277,10 +279,10 @@ CI
 SMALL
 =====
 1. DECam HiTS
-    - Available on lsst-dev in `/datasets/decam/_internal/hits`
-    - Total of 2269 images available.
+    - Available on lsst-dev in `/datasets/decam/_internal/raw/hits`
+    - Total of 2269 visits available.
     - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
-    - Essentially only g-band, as there are only a few r-band images available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
+    - Essentially only g-band, as there are only a few r-band visits available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
     - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
       https://github.com/lsst/ap_verify_hits2015
 
@@ -299,24 +301,24 @@ AP Candidate Additional Datasets
 1. DECam DES SN fields
     - 8 shallow SN fields, 2 deep SN fields
     - griz observation sequences obtained ~ weekly
-    - deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
+    - Deep fields have multiple exposures in one field in the same filter each night, with other filters other nights; shallow fields have a single griz sequence in one night.  Former is more LSST-like.
     - Raw data are public
     - 10 fields from 2014 (DES Y2) in field SN-X3.
     - g (no particular reason for this choice)
-    - visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
+    - Visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
     - Available on lsst-dev in `/datasets/des_sn/repo_Y2`
 
 2. HSC New Horizons
-    - crowded stellar field (Galactic Bulge)
-    - available to us (not fully public?); unclear details of numbers of epochs, etc.
-    - scientifically untapped
+    - Crowded stellar field (Galactic Bulge)
+    - Available to us (not fully public?); unclear details of numbers of epochs, etc.
+    - Scientifically untapped
     - Available on lsst-dev at `/datasets/hsc/raw/newhorizons/`
 
 3. DECam Bulge survey
-    - crowded stellar field
+    - Crowded stellar field
     - Propoasal ID 2013A-0719 (PI Saha)
-    - limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
-    - published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
+    - Limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
+    - Published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
 
 4. DECam NEO survey
     - PI L. Allen
