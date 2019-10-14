@@ -254,19 +254,19 @@ Summary recommendations:
   4. use a DES Deep SN field for large-scale processing.
 
 Desiderata for AP testing:
-  - tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
-  - the ability to exercise as many aspects of LSST pipelines and data products as possible
-  - public availability (so that we can feely recruit various LSST stakeholders)
-  - potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
-  - datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
-  - at least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
-  - at least one dataset should be in multiple filters from a camera without an ADC to test DCR.
-  - probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this.
-  - datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
-  - ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
-  - datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
-  - substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
-  - there is a balance to be struck between using datasets that have been extensively mined scientifically by the survey teams as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand, well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
+  - Tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
+  - The ability to exercise as many aspects of LSST pipelines and data products as possible
+  - Public availability (so that we can feely recruit various LSST stakeholders)
+  - Potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
+  - Datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
+  - At least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
+  - At least one dataset should be in multiple filters from a camera without an ADC to test DCR.
+  - Probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this.
+  - Datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
+  - Ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
+  - Datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
+  - Substantial dithering or field overlaps will allow us to test our ability to piece together templates from multiple images (some transient surveys, such as HiTS, PTF, and ZTF, use a strict field grid)
+  - There is a balance to be struck between using datasets that have been extensively mined scientifically by the survey teams as opposed to datasets that have not been exploited completely.  If published catalogs of variables, transients, and/or asteroids exist, they will aid in false-positive discrimination and speed QA work.  On the other hand, well-mined datasets may be less motivating to work on, particularly for those outside LSST DM.
   - LSST-like cadences to test Solar System Orbit algorithms
 
 CI
@@ -327,9 +327,9 @@ AP Candidate Additional Datasets
 
 5. HSC SSP Deep or Ultra-Deep:
     - grizy; exposure times 3-5 minutes; tens of epochs available
-    - two UD fields and 15 deep fields
+    - Two UD fields and 15 deep fields
     - Open Time observations from Yoshida
-    - tens of epochs over a couple of nights for a range of fields
+    - Tens of epochs over a couple of nights for a range of fields
     - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
 
 
