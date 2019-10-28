@@ -17,7 +17,7 @@ doc_title: 'Test Datasets for Scientific Performance Monitoring'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
-    - 'Michael Wood-Vasey'
+    - 'Michael Wood-Vasey, Eric Bellm, Jim Bosch, Jeff Carlin, Zeljko Ivezic, Lauren MacArthur, Colin Slater'
 
 # Current document revision date, YYYY-MM-DD
 # Only set this field if you need to manually fix the revision date;
@@ -34,7 +34,7 @@ authors:
 # doi: 10.5281/zenodo.#####
 
 # Copyright statement
-copyright: '2018, AURA/LSST'
+copyright: '2019, AURA/LSST'
 
 # Description. A short, 1-2 sentence statemement used by document indices.
 description: 'Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.'

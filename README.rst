@@ -14,7 +14,7 @@ Datasets for Performance Monitoring
 DMTN-091
 ========
 
-Planning out datatests for regular performance monitor of the Science Pipelines from CI through large-scale performance reports.
+Planning out datatests for regular performance monitoring of the Science Pipelines from CI through large-scale performance reports.
 
 **Links:**
 
