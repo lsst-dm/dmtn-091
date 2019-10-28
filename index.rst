@@ -351,11 +351,10 @@ Datasets considered but not selected
 ============
 Related Work
 ============
-There is a detailed table of datasets and the elements of https://ls.st/LSE-61 tested by each on the LSST Project Confluence.  The table there aims to cover all aspects of the DM system, not just the Science Pipelines focus on this present tech note.
+There is a detailed table of datasets and the elements of https://ls.st/LSE-61 tested by each on the LSST Project Confluence.  The table there aims to cover all aspects of the DM system, not just the Science Pipelines focus on this present tech note:
 `Data sets used for DM Verification and Validation <https://confluence.lsstcorp.org/x/nYn4BQ>`_
 
-There are statements from the perspective of the Commissioning team:
-
+And here are some thoughts from the perspective of the Commissioning team:
 `Design Requirements for Science Verification Analysis Framework <https://confluence.lsstcorp.org/pages/viewpage.action?spaceKey=LSSTCOM&title=Design+Requirements+for+Science+Verification+Analysis+Framework>`_
 
 ===============
