@@ -281,7 +281,7 @@ SMALL
 1. DECam HiTS
     - Available on lsst-dev in `/datasets/decam/_internal/raw/hits`
     - Total of 2269 visits available.
-    - up to 14 DECam fields taken over two seasons, or a larger number (40-50) of single season-only ; 4-5 epochs per night in one band (g) over a week
+    - up to 14 DECam fields taken over two seasons, and a larger number (40-50) of fields observed only during a single season ; 4-5 epochs per night in one band (g) over a week
     - Essentially only g-band, as there are only a few r-band visits available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
     - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
       https://github.com/lsst/ap_verify_hits2015
