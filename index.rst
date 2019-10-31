@@ -332,6 +332,13 @@ AP Candidate Additional Datasets
     - Tens of epochs over a couple of nights for a range of fields
     - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
 
+6. Deep DECam Outer Solar System Survey (DDOSSS)
+    - P.I. D. Trilling.
+    - 13 total nights across 2019A, B semesters.
+    - VR=27 mag.  Observations are in several bands.
+    - Goal is 5,000 KBOs.
+    - https://www.noao.edu/noaoprop/abstract.mpl?2019A-0337
+    - Provides a deep dataset and a good source of comparison for deep Solar System object recovery, which is a key interesting science case.
 
 ====================================
 Datasets considered but not selected
