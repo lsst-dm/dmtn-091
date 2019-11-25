@@ -29,7 +29,7 @@ We finally present more detailed discussion of the existing and near-future plan
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2.  This needs to be supplemented by HSC observations in crowded fields.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in future. 
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
 3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
 
@@ -84,6 +84,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Monitor quantities to 10%, both static sky and DIA
         - Include known edge cases
         - Suitable for daily tracking of regression both in metrics and robustness.
+        - Generate DRP/DPDD by running SDM Standardization.
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -99,10 +100,10 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Coadd at least 10 full focal-plane images/filter.
         - Run image-template DIA for 5 epochs of same field.
     * Goals
-        - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
+        - Peformance Report for static sky and DIA.  Monitor numbers to 5%
         - KPMs numbers should be suitable to predict full survey performance to ~50%
-        - Generate DRP/DPDD
-        - Allow testing of loading of data into DAX.
+        - Generate DRP/DPDD by running SDM Standardization
+        - Allow testing of loading of data into DAX
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -112,6 +113,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Forced Photometry
         - Ingest of DRP data into database/DPDD structure
 
+The SDM Standardization process to generate the DPDD should always be run for at least MEDIUM and LARGE datasets, howver, if the process is fast enough, it should be run following the processing of all datasets.  
 
 =================
 DRP Test Datasets
@@ -221,11 +223,13 @@ LARGE
 
 DESIRED DATASETS
 ================
-In the future, there are at least two additional dataset needs:
+In the future, there are at least three additional dataset needs:
 
-1. Less Large LARGE
+1. The DESC DC2 simulated dataset should be added to the list of MEDIUM datasets to be processed with the same frequency as the HSC RC2 dataset. 
 
-   Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
+2. Less Large LARGE
+
+   Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale. Such a dataset will be defined based on need. 
 
 2. Missing Features
 
@@ -293,7 +297,7 @@ MEDIUM
     https://jira.lsstcorp.org/browse/DM-20559
     https://jira.lsstcorp.org/browse/DM-20560
 
-It's less clear that it's feasible to do active regular testing of DIA on LARGE datasets.  MEDIUM should be sufficient to characterize the key science performance goals.
+It's less clear that it's necessary to do active regular testing of DIA on LARGE datasets.  MEDIUM should be sufficient to characterize the key science performance goals.
 
 
 AP Candidate Additional Datasets
