@@ -44,7 +44,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     * Requirements
         - Runs less than 15 minutes wall time on 16 cores
         - Good data that is expected to be successfully processed.
-        - Can be run by developer on an individual machine.
+        - Can be run by developer on an individual machine
     * Goals
         - Test that key initial processing steps execute
         - Allow checks for reasonable ranges of
@@ -66,7 +66,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
             - Numbers of stars
             - zeropoints
             - KPMs
-            - Numbers of detected DIA sources.
+            - Numbers of detected DIA sources
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -83,7 +83,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     * Goals
         - Monitor quantities to 10%, both static sky and DIA
         - Include known edge cases
-        - Suitable for daily tracking of regression both in metrics and robustness.
+        - Suitable for daily tracking of regression both in metrics and robustness
+        - Generate DRP/DPDD by running SDM Standardization.
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -96,8 +97,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     * Goals
         - 168 hours on 512 cores
         - At least 3 filters
-        - Coadd at least 10 full focal-plane images/filter.
-        - Run image-template DIA for 5 epochs of same field.
+        - Coadd at least 10 full focal-plane images/filter
+        - Run image-template DIA for 5 epochs of same field
     * Goals
         - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
         - KPMs numbers should be suitable to predict full survey performance to ~50%
@@ -135,10 +136,10 @@ SMALL
     The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
 2. https://github.com/lsst/validation_data_hsc
-    - 56 GB raw + master calibrations.
-    - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data.
-    - Calibration data available as pre-computed masters and used to do ISR.
-    - Currently processed on a daily (8 hour?) cadence through to coadd.
+    - 56 GB raw + master calibrations
+    - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data
+    - Calibration data available as pre-computed masters and used to do ISR
+    - Currently processed on a daily (8 hour?) cadence through to coadd
     - Currently not used for DIA.
 
 MEDIUM
@@ -214,8 +215,8 @@ LARGE
      * Contains 5654 visits in 7 bands (grizy plus two narrow-band filters)
      * Covers 119 tracts
      * Data from 3 survey tiers: WIDE, DEEP, UDEEP
-     * Is 13 times larger that RC2.
-     * Takes 80,000 core hours.  80% of this is spent in the full multiband processing.
+     * Is 13 times larger that RC2
+     * Takes 80,000 core hours.  80% of this is spent in the full multiband processing
 
      It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
 
@@ -231,11 +232,11 @@ In the future, there are at least two additional dataset needs:
 
    Three important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
-      - Differential chromatic refraction (HSC has an atmospheric dispersion corrector).
+      - Differential chromatic refraction (HSC has an atmospheric dispersion corrector)
 
-      - LSST-like wavefront sensors (HSC's are too close to focus to be useful for learning much about the state of the optical system).
+      - LSST-like wavefront sensors (HSC's are too close to focus to be useful for learning much about the state of the optical system)
 
-      - Crowded stellar fields.
+      - Crowded stellar fields
 
    A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g., physically-motivated PSF modeling).  Many non-PDR1/2+RC2 HSC datasets do include more interesting variability or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from ComCam or even the full LSST camera are available.
 
@@ -248,20 +249,20 @@ CI, SMALL, MEDIUM, and LARGE datasets exist suitable for significant amount of S
 AP Test Datasets
 =================
 Summary recommendations:
-  1. use a subset of HiTS for quick turnaround processing, smoke tests, etc.  DONE.
-  2. use the DECam Bulge survey for crowded field tests.  IN PROGRESS.
+  1. Use a subset of HiTS for quick turnaround processing, smoke tests, etc.  DONE.
+  2. Use the DECam Bulge survey for crowded field tests.  IN PROGRESS.
   3. Select a subset of HSC SSP PDR1 vs PDR2.  TICKET OPEN.
-  4. use a DES Deep SN field for large-scale processing.
+  4. Use a DES Deep SN field for large-scale processing.
 
 Desiderata for AP testing:
   - Tens of epochs per filter per tract in order to construct templates for image differencing and to characterize variability
   - The ability to exercise as many aspects of LSST pipelines and data products as possible
   - Public availability (so that we can feely recruit various LSST stakeholders)
-  - Potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis.
+  - Potential for enabling journal publications (both technical and scientific) so that various stakeholders beyond LSST DM may have direct interest in contributing tools and analysis
   - Datasets from at least two different cameras, so that we can isolate effects of LSST pipeline performance from camera-specific details (e.g., ISR, PSF variations) that impact the false-positive rate
   - At least one dataset should be from HSC, to take advantage of Princeton's work on DRP processing
-  - At least one dataset should be in multiple filters from a camera without an ADC to test DCR.
-  - Probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this.
+  - At least one dataset should be in multiple filters from a camera without an ADC to test DCR
+  - Probably only two cameras should be used for regular detailed processing, to avoid spending undue DM time characterizing non-LSST cameras.  HSC and DECam are the clear choices for this
   - Datasets should include regions of both high and low stellar densities, to understand the impact of crowding on image differencing
   - Ideally, data will be taken over multiple seasons to enable clear separation of templates from the science images
   - Datasets sampling a range of timescales (hours, days, ... years) provide the most complete look at the real transient and variable population
@@ -280,7 +281,7 @@ SMALL
 =====
 1. DECam HiTS
     - Available on lsst-dev in `/datasets/decam/_internal/raw/hits`
-    - Total of 2269 visits available.
+    - Total of 2269 visits available
     - up to 14 DECam fields taken over two seasons, and a larger number (40-50) of fields observed only during a single season ; 4-5 epochs per night in one band (g) over a week
     - Essentially only g-band, as there are only a few r-band visits available.  This would not then actually satisfy the 2-band MEDIUM color requirement outlined above.
     - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in
