@@ -29,7 +29,7 @@ We finally present more detailed discussion of the existing and near-future plan
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2.  This needs to be supplemented by HSC observations in crowded fields.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in the future. 
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
 3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
 
@@ -113,6 +113,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Forced Photometry
         - Ingest of DRP data into database/DPDD structure
 
+The SDM Standardization process to generate the DPDD should always be run for at least MEDIUM and LARGE datasets. However, if the process is fast enough, it should be run following the processing of all datasets.  
 
 =================
 DRP Test Datasets
@@ -215,7 +216,7 @@ LARGE
      * Contains 5654 visits in 7 bands (grizy plus two narrow-band filters)
      * Covers 119 tracts
      * Data from 3 survey tiers: WIDE, DEEP, UDEEP
-     * Is 13 times larger that RC2
+     * Is 13 times larger than RC2
      * Takes 80,000 core hours.  80% of this is spent in the full multiband processing
 
      It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
@@ -228,7 +229,7 @@ In the future, there are at least two additional dataset needs:
 
    Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
-2. Missing Features
+3. Missing Features
 
    Three important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
