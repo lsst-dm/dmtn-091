@@ -357,7 +357,7 @@ Datasets considered but not selected
    - MOSAIC data.  Was processed through the DM Science Pipelines once (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
 
 ===========================================
-Timescale for Preserving Processed Datasets
+Timescale for preserving processed datasets
 ===========================================
 
 With regular reprocessing of datasets, it is neither necessary nor feasible to preserve all processed datasets in perpetuity. The following gives the required timescales for retaining processed test datasets:
