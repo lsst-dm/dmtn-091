@@ -356,6 +356,16 @@ Datasets considered but not selected
  * DLS
    - MOSAIC data.  Was processed through the DM Science Pipelines once (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
 
+===========================================
+Timescale for Preserving Processed Datasets
+===========================================
+
+With regular reprocessing of datasets, it is neither necessary nor feasible to preserve all processed datasets in perpetuity. The following gives the required timescales for retaining processed test datasets:
+
+* LARGE: A minimum of two datasets should always be preserved as well as two sets of corresponding master calibraions to be used for subsequent processing campaigns. The reason is to compare the results of each processing campaign. One of the two may be deleted prior to processing the next one if space is needed. 
+* MEDIUM: 12 months.
+* SMALL: 1 month.
+* CI: There is no need to preserve any CI datasets.
 
 ============
 Related Work
