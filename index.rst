@@ -19,11 +19,14 @@
 Abstract
 ========
 
-This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance of the LSST DRP and AP pipelines.  It does not cover datasets for testing the full DM system such as data acquisition, data transport, data loading, or the LSST Science Platform.
+This document serves to define dataset types and sizes for semi-automated monitoring of scientific performance of the LSST DRP and AP pipelines. It does not cover datasets for testing the full DM system such as data acquisition, data transport, data loading, or the LSST Science Platform.
 
 We start with a summary recommendation for a minimal set of datasets that would be suitable for performance monitoring, regression testing, and estimation of Key Performance Metrics (KPMs) for the LSST DM Science Pipelines.
 We next define and provide guidelines for the processing workflow and cadence, and monitoring and assessment of test datasets divided into groups.  We refer to these groups as CI, SMALL, MEDIUM, and LARGE datasets.
 We finally present more detailed discussion of the existing and near-future planned datasets for DRP and AP Science Performance monitoring.
+
+We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 23 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.  
+
 
 =================
 Executive Summary
@@ -41,24 +44,20 @@ Dataset Types and Goals
 We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant to span a range of computational requirements, response time, and fidelity of performance measurements.
 
 1. CI
-    * Requirements
+    * Goals
+        - Test that key initial processing steps execute
+        - Allow checks for reasonable ranges of, for example, 
+            - Numbers of stars
+            - Photometric zeropoints
+        * Requirements
         - Runs less than 15 minutes wall time on 16 cores
         - Good data that is expected to be successfully processed.
         - Can be run by developer on an individual machine
-    * Goals
-        - Test that key initial processing steps execute
-        - Allow checks for reasonable ranges of
-            - Numbers of stars
-            - Photometric zeropoints
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
 
 2. SMALL
-    * Requirements
-        - 1 hour on 16-32 cores
-        - Coadd at least 5 detectors
-        - Run image-image DIA
     * Goals
         - Fuller integrated testing
         - Verify that DIA works
@@ -67,6 +66,10 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
             - zeropoints
             - KPMs
             - Numbers of detected DIA sources
+    * Requirements
+        - 1 hour on 16-32 cores
+        - Coadd at least 5 detectors
+        - Run image-image DIA
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -75,16 +78,16 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Forced Photometry
 
 3. MEDIUM
-    * Requirements
-        - 24 hours on 64-128 cores
-        - At least 2 filters
-        - Coadd at least 5 full focal-plane images per filter
-        - Run image-template DIA
     * Goals
         - Monitor quantities to 10%, both static sky and DIA
         - Include known edge cases
         - Suitable for daily tracking of regression both in metrics and robustness
         - Generate DRP/DPDD by running SDM Standardization.
+    * Requirements
+        - 24 hours on 64-128 cores
+        - At least 2 filters
+        - Coadd at least 5 full focal-plane images per filter
+        - Run image-template DIA
     * Steps
         - Instrument-Signature Removal
         - Single-Frame Processing
@@ -94,7 +97,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Forced Photometry
 
 4. LARGE
-    * Goals
+    * Requirements
         - 168 hours on 512 cores
         - At least 3 filters
         - Coadd at least 10 full focal-plane images/filter
@@ -149,7 +152,7 @@ MEDIUM
 
    The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is  processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots, and an uplodate of the results of `validate_drp` to SQuaSH.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
 
-   The HSC RC2 data is presently (2019-09-10) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
+   The HSC RC2 data is presently (2021-02-02) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
    Particular attention was paid in defining this datasets for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
@@ -221,6 +224,7 @@ LARGE
 
      It is appropriate for DRP and for AP testing and performance monitoring.  As with PDR1, PDR2 is similarly a LARGE dataset.
 
+
 DESIRED DATASETS
 ================
 In the future, there are at least two additional dataset needs:
@@ -229,7 +233,7 @@ In the future, there are at least two additional dataset needs:
 
    Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
-3. Missing Features
+2. Missing Features
 
    Three important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
@@ -356,6 +360,16 @@ Datasets considered but not selected
  * DLS
    - MOSAIC data.  Was processed through the DM Science Pipelines once (https://dmtn-063.lsst.io/), but there is no supported LSST Science Pipelines module for the camera, so there is no possibility of ongoing analysis.
 
+===========================================
+Timescale for preserving processed datasets
+===========================================
+
+ Preserved outputs are very useful for people testing downstream components without needing to regenerate them as needed. With regular reprocessing of datasets, the volume of data on disk will grow rapidly. It is neither necessary nor feasible to preserve all processed datasets in perpetuity. The following gives the required timescales for retaining processed test datasets:
+
+ * LARGE: A minimum of two datasets should always be preserved as well as two sets of corresponding master calibraions to be used for subsequent processing campaigns. The reason is to be able to compare the results of each subsequent processing campaign. One of the two may be deleted prior to processing the next one if space is needed. 
+ * MEDIUM: A minimum of 12 months. 
+ * SMALL: 1 month at the most. Datasets in this category should be managed so that there is always at least one available and so that the likelihood of a dataset being deleted while in use is mitigated. The output from each successive run in this category should be preserved at least until 72 hours after the output of the next run is available.
+ * CI: There is no need to preserve any CI datasets.
 
 ============
 Related Work
