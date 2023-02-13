@@ -25,14 +25,14 @@ We start with a summary recommendation for a minimal set of datasets that would 
 We next define and provide guidelines for the processing workflow and cadence, and monitoring and assessment of test datasets divided into groups.  We refer to these groups as CI, SMALL, MEDIUM, and LARGE datasets.
 We finally present more detailed discussion of the existing and near-future planned datasets for DRP and AP Science Performance monitoring.
 
-We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 23 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.  
+We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 23 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.
 
 
 =================
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in the future. 
+1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in the future.
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
 3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
 
@@ -46,10 +46,10 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 1. CI
     * Goals
         - Test that key initial processing steps execute
-        - Allow checks for reasonable ranges of, for example, 
+        - Allow checks for reasonable ranges of, for example,
             - Numbers of stars
             - Photometric zeropoints
-        * Requirements
+    * Requirements
         - Runs less than 15 minutes wall time on 16 cores
         - Good data that is expected to be successfully processed.
         - Can be run by developer on an individual machine
@@ -116,7 +116,7 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
         - Forced Photometry
         - Ingest of DRP data into database/DPDD structure
 
-The SDM Standardization process to generate the DPDD should always be run for at least MEDIUM and LARGE datasets. However, if the process is fast enough, it should be run following the processing of all datasets.  
+The SDM Standardization process to generate the DPDD should always be run for at least MEDIUM and LARGE datasets. However, if the process is fast enough, it should be run following the processing of all datasets.
 
 =================
 DRP Test Datasets
@@ -129,8 +129,9 @@ CI
 1. `validation_data_{cfht,decam}`
 
     There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HSC, see next section).  These are
-      * https://github.com/lsst/validation_data_decam  
-      * https://github.com/lsst/validation_data_cfht  
+      * https://github.com/lsst/validation_data_decam
+      * https://github.com/lsst/validation_data_cfht
+
     Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repositories also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
 
 SMALL
@@ -150,11 +151,11 @@ MEDIUM
 ======
 1. HSC RC2
 
-   The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is  processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots, and an uplodate of the results of `validate_drp` to SQuaSH.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
+   The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots, and an uplodate of the results of `validate_drp` to SQuaSH.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
 
    The HSC RC2 data is presently (2021-02-02) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
-   Particular attention was paid in defining this datasets for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
+   Particular attention was paid in defining this dataset for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
    The monthly processing of this dataset is tracked at:
    `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_
@@ -202,6 +203,40 @@ UD_COSMOS   9813    TOTAL   177       Size: 3.2 TB
 =========   =====   ======  ========= ==========
 
    This dataset satisfies the definition above for a MEDIUM dataset.
+
+2. HSC RC3 (proposed)
+
+  As survey operations approaches and our ability to process and analyze larger datasets increases, there is a need for a dataset that is more substantial than RC2, allowing us to identify and test the handling of more "edge cases" by the science pipelines. We thus propose the creation of an HSC "RC3" dataset that has the following characteristics:
+
+    * Covers a contiguous area that spans more than a tract in size
+    * Contains data taken with multiple physical filters that map to the same "effective" filter (e.g., both HSC-I and HSC-I2, which map to "i")
+    * Is sufficient for creating templates for AP difference imaging in the COSMOS field
+    * Provides a long time baseline sufficient to measure proper motions and parallaxes
+    * Includes data with rotational dithers
+    * Includes "all" HSC visits in the COSMOS field for "full-depth" testing of pipelines
+    * Samples fields at both high and low Galactic latitudes
+
+  **Proposal:**
+
+  Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we propose to include *all* COSMOS data in RC3, plus adjacent tracts from the WIDE footprint that create a contiguous field extending to the "edge" of the survey footprint. (Suggestion: include tracts 9812-9814, 9569-9572, and 9326-9329.) This enables all of the following:
+
+    * Full survey depth coadds in the COSMOS field
+    * COSMOS "truth" table of deep HST galaxy measurements for comparison
+    * COSMOS provides a long time baseline over which to validate parallax/proper motion algorithms (though the lack of dithering may be an issue; including dithered WIDE data may alleviate this)
+    * COSMOS has data from both HSC-I/HSC-I2 and also HSC-R/HSC-R2. We can thus test processing on, e.g., only HSC-I, only HSC-I2, or the combination of them both.
+    * The large number of visits in COSMOS means we can create independent coadds consisting of separate sets of visits.
+    * Extending over a large area provides a dataset to use in developing QA tools (e.g., survey property maps)
+    * Extends to the edge of the survey footprint to explore issues near survey boundaries
+    * Can use WIDE data when proper dithering is required, but COSMOS data when depth is more important
+
+  **Additional considerations:**
+
+    * COSMOS and the current RC2 dataset provide little variation in declination or Galactic latitude. We may need to include some Subaru+HSC PI data to get higher source densities.
+    * We could consider cherry-picking some region(s) of the sky with, e.g., a known rich galaxy cluster (e.g., RC2's tract 9615 was selected for this reason + a big galaxy), Galactic cirrus, a nearby globular cluster or dwarf galaxy, or other features to enable exercising/testing specific algorithms and capabilities.
+    * It is vital to inject synthetic sources into data for validation purposes. However, the details of what types of sources to inject, how many tracts to inject them into, and others can be decided after the RC3 dataset has been created.
+
+This section is a condensed encapsulation of discussion that took place on `this Confluence page <https://confluence.lsstcorp.org/x/vY1cC>`_; for more details about the considerations that were discussed, please consult that page.
+
 
 LARGE
 =====
@@ -280,6 +315,7 @@ CI
 1. DECam HiTS
     - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in
       https://github.com/lsst/ap_verify_ci_hits2015
+
     This subset is only 3 visits and 2 CCDs per visit.
 
 SMALL
@@ -366,8 +402,8 @@ Timescale for preserving processed datasets
 
  Preserved outputs are very useful for people testing downstream components without needing to regenerate them as needed. With regular reprocessing of datasets, the volume of data on disk will grow rapidly. It is neither necessary nor feasible to preserve all processed datasets in perpetuity. The following gives the required timescales for retaining processed test datasets:
 
- * LARGE: A minimum of two datasets should always be preserved as well as two sets of corresponding master calibraions to be used for subsequent processing campaigns. The reason is to be able to compare the results of each subsequent processing campaign. One of the two may be deleted prior to processing the next one if space is needed. 
- * MEDIUM: A minimum of 12 months. 
+ * LARGE: A minimum of two datasets should always be preserved as well as two sets of corresponding master calibraions to be used for subsequent processing campaigns. The reason is to be able to compare the results of each subsequent processing campaign. One of the two may be deleted prior to processing the next one if space is needed.
+ * MEDIUM: A minimum of 12 months.
  * SMALL: 1 month at the most. Datasets in this category should be managed so that there is always at least one available and so that the likelihood of a dataset being deleted while in use is mitigated. The output from each successive run in this category should be preserved at least until 72 hours after the output of the next run is available.
  * CI: There is no need to preserve any CI datasets.
 
