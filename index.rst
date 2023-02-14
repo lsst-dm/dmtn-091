@@ -46,69 +46,60 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 1. CI
 
    - Goals
-
      - Test that key initial processing steps execute
      - Allow checks for reasonable ranges of, for example,
-
        - Numbers of stars
        - Photometric zeropoints
 
    - Requirements
-
      - Runs less than 15 minutes wall time on 16 cores
      - Good data that is expected to be successfully processed.
      - Can be run by developer on an individual machine
 
    - Steps
-
      - Instrument-Signature Removal
      - Single-Frame Processing
+
 
 2. SMALL
 
    - Goals
-
      - Fuller integrated testing
      - Verify that DIA works
      - Monitor quantities to 25%:
-
        - Numbers of stars
        - zeropoints
        - KPMs
        - Numbers of detected DIA sources
 
    - Requirements
-
      - 1 hour on 16-32 cores
      - Coadd at least 5 detectors
      - Run image-image DIA
 
    - Steps
-
      - Instrument-Signature Removal
      - Single-Frame Processing
      - Coadd
      - Difference Image Analysis
      - Forced Photometry
 
+
 3. MEDIUM
 
    - Goals
-
      - Monitor quantities to 10%, both static sky and DIA
      - Include known edge cases
      - Suitable for daily tracking of regression both in metrics and robustness
      - Generate DRP/DPDD by running SDM Standardization.
 
    - Requirements
-
      - 24 hours on 64-128 cores
      - At least 2 filters
      - Coadd at least 5 full focal-plane images per filter
      - Run image-template DIA
 
    - Steps
-
      - Instrument-Signature Removal
      - Single-Frame Processing
      - Coadd
@@ -116,24 +107,22 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
      - Difference Image Analysis
      - Forced Photometry
 
+
 4. LARGE
 
    - Requirements
-
      - 168 hours on 512 cores
      - At least 3 filters
      - Coadd at least 10 full focal-plane images/filter
      - Run image-template DIA for 5 epochs of same field
 
    - Goals
-
      - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
      - KPMs numbers should be suitable to predict full survey performance to ~50%
      - Generate DRP/DPDD
      - Allow testing of loading of data into DAX.
 
    - Steps
-
      - Instrument-Signature Removal
      - Single-Frame Processing
      - Coadd
