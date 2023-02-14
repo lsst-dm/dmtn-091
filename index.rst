@@ -45,102 +45,102 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
 
 1. CI
 
-  - Goals
+   - Goals
 
-    - Test that key initial processing steps execute
-    - Allow checks for reasonable ranges of, for example,
+     - Test that key initial processing steps execute
+     - Allow checks for reasonable ranges of, for example,
 
-      - Numbers of stars
-      - Photometric zeropoints
+       - Numbers of stars
+       - Photometric zeropoints
 
-  - Requirements
+   - Requirements
 
-    - Runs less than 15 minutes wall time on 16 cores
-    - Good data that is expected to be successfully processed.
-    - Can be run by developer on an individual machine
+     - Runs less than 15 minutes wall time on 16 cores
+     - Good data that is expected to be successfully processed.
+     - Can be run by developer on an individual machine
 
-  - Steps
+   - Steps
 
-    - Instrument-Signature Removal
-    - Single-Frame Processing
+     - Instrument-Signature Removal
+     - Single-Frame Processing
 
 2. SMALL
 
-  - Goals
+   - Goals
 
-    - Fuller integrated testing
-    - Verify that DIA works
-    - Monitor quantities to 25%:
+     - Fuller integrated testing
+     - Verify that DIA works
+     - Monitor quantities to 25%:
 
-      - Numbers of stars
-      - zeropoints
-      - KPMs
-      - Numbers of detected DIA sources
+       - Numbers of stars
+       - zeropoints
+       - KPMs
+       - Numbers of detected DIA sources
 
-  - Requirements
+   - Requirements
 
-    - 1 hour on 16-32 cores
-    - Coadd at least 5 detectors
-    - Run image-image DIA
+     - 1 hour on 16-32 cores
+     - Coadd at least 5 detectors
+     - Run image-image DIA
 
-  - Steps
+   - Steps
 
-    - Instrument-Signature Removal
-    - Single-Frame Processing
-    - Coadd
-    - Difference Image Analysis
-    - Forced Photometry
+     - Instrument-Signature Removal
+     - Single-Frame Processing
+     - Coadd
+     - Difference Image Analysis
+     - Forced Photometry
 
 3. MEDIUM
 
-  - Goals
+   - Goals
 
-    - Monitor quantities to 10%, both static sky and DIA
-    - Include known edge cases
-    - Suitable for daily tracking of regression both in metrics and robustness
-    - Generate DRP/DPDD by running SDM Standardization.
+     - Monitor quantities to 10%, both static sky and DIA
+     - Include known edge cases
+     - Suitable for daily tracking of regression both in metrics and robustness
+     - Generate DRP/DPDD by running SDM Standardization.
 
-  - Requirements
+   - Requirements
 
-    - 24 hours on 64-128 cores
-    - At least 2 filters
-    - Coadd at least 5 full focal-plane images per filter
-    - Run image-template DIA
+     - 24 hours on 64-128 cores
+     - At least 2 filters
+     - Coadd at least 5 full focal-plane images per filter
+     - Run image-template DIA
 
-  - Steps
+   - Steps
 
-    - Instrument-Signature Removal
-    - Single-Frame Processing
-    - Coadd
-    - Multiband detection, merging, and measurement
-    - Difference Image Analysis
-    - Forced Photometry
+     - Instrument-Signature Removal
+     - Single-Frame Processing
+     - Coadd
+     - Multiband detection, merging, and measurement
+     - Difference Image Analysis
+     - Forced Photometry
 
 4. LARGE
 
-  - Requirements
+   - Requirements
 
-    - 168 hours on 512 cores
-    - At least 3 filters
-    - Coadd at least 10 full focal-plane images/filter
-    - Run image-template DIA for 5 epochs of same field
+     - 168 hours on 512 cores
+     - At least 3 filters
+     - Coadd at least 10 full focal-plane images/filter
+     - Run image-template DIA for 5 epochs of same field
 
-  - Goals
+   - Goals
 
-    - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
-    - KPMs numbers should be suitable to predict full survey performance to ~50%
-    - Generate DRP/DPDD
-    - Allow testing of loading of data into DAX.
+     - Peformance Report for static sky and DIA.  Monitor numbers to 5%.
+     - KPMs numbers should be suitable to predict full survey performance to ~50%
+     - Generate DRP/DPDD
+     - Allow testing of loading of data into DAX.
 
-  - Steps
+   - Steps
 
-    - Instrument-Signature Removal
-    - Single-Frame Processing
-    - Coadd
-    - Multiband detection, merging, and measurement
-    - Difference Image Analysis
-    - Forced Photometry
-    - Ingest of DRP data into database/DPDD structure
+     - Instrument-Signature Removal
+     - Single-Frame Processing
+     - Coadd
+     - Multiband detection, merging, and measurement
+     - Difference Image Analysis
+     - Forced Photometry
+     - Ingest of DRP data into database/DPDD structure
 
 The SDM Standardization process to generate the DPDD should always be run for at least MEDIUM and LARGE datasets. However, if the process is fast enough, it should be run following the processing of all datasets.
 
