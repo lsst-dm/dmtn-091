@@ -235,7 +235,7 @@ UD_COSMOS   9813    TOTAL   177       Size: 3.2 TB
     * We could consider cherry-picking some region(s) of the sky with, e.g., a known rich galaxy cluster (e.g., RC2's tract 9615 was selected for this reason + a big galaxy), Galactic cirrus, a nearby globular cluster or dwarf galaxy, or other features to enable exercising/testing specific algorithms and capabilities.
     * It is vital to inject synthetic sources into data for validation purposes. However, the details of what types of sources to inject, how many tracts to inject them into, and others can be decided after the RC3 dataset has been created.
 
-.. figure:: /_static/RC3fields_HSC.png
+.. figure:: /_static/tracts_patches_W_w03_HSC-I_trimmed.png
     :name: HSC_fields
 
     Map of the HSC-SSP tracts in the region near the COSMOS field (centered on tract 9813). The proposed RC3 dataset would contain tracts 9812-9814, 9569-9572, and 9326-9329, including *all* data from the DEEP/ULTRADEEP layers in the COSMOS field.
