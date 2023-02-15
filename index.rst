@@ -372,16 +372,16 @@ As survey operations approaches and our ability to process and analyze larger da
 
 **Proposal:**
 
-Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we propose to include *all* COSMOS data in RC3, plus adjacent tracts from the WIDE footprint that create a contiguous field extending to the "edge" of the survey footprint. (Suggestion: include tracts 9812-9814, 9569-9572, and 9326-9329.) This enables all of the following:
+Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we propose to include *all* COSMOS data in RC3, plus adjacent tracts from the WIDE footprint that create a contiguous field extending to the "edge" of the survey footprint. (Suggestion: include tracts 9812-9814, 9569-9572, and 9326-9329; see the figure below for a map of HSC tracts.) This enables all of the following:
 
-  - Full survey depth coadds in the COSMOS field
-  - COSMOS "truth" table of deep HST galaxy measurements for comparison
-  - COSMOS provides a long time baseline over which to validate parallax/proper motion algorithms (though the lack of dithering may be an issue; including dithered WIDE data may alleviate this)
+  - Full survey depth coadds in the COSMOS field.
+  - COSMOS "truth" table of deep HST galaxy, star, and transient/variable measurements for comparison.
+  - COSMOS provides a long time baseline over which to validate parallax/proper motion algorithms (though the lack of dithering may be an issue; including dithered WIDE data may alleviate this).
   - COSMOS has data from both HSC-I/HSC-I2 and also HSC-R/HSC-R2. We can thus test processing on, e.g., only HSC-I, only HSC-I2, or the combination of them both.
   - The large number of visits in COSMOS means we can create independent coadds consisting of separate sets of visits.
-  - Extending over a large area provides a dataset to use in developing QA tools (e.g., survey property maps)
-  - Extends to the edge of the survey footprint to explore issues near survey boundaries
-  - Can use WIDE data when proper dithering is required, but COSMOS data when depth is more important
+  - Extending over a large area provides a dataset to use in developing QA tools (e.g., survey property maps).
+  - Extends to the edge of the survey footprint to explore issues near survey boundaries.
+  - Can use WIDE data when proper dithering is required, but COSMOS data when depth is more important.
 
 **Additional considerations:**
 
@@ -390,7 +390,7 @@ Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we pro
   - It is vital to inject synthetic sources into data for validation purposes. However, the details of what types of sources to inject, how many tracts to inject them into, and others can be decided after the RC3 dataset has been created.
 
 .. figure:: /_static/tracts_patches_W_w03_HSC-I_trimmed.png
-    :name: HSC_fields
+    :name: fig-HSC_fields
 
     Map of the HSC-SSP tracts in the region near the COSMOS field (centered on tract 9813). The proposed RC3 dataset would contain tracts 9812-9814, 9569-9572, and 9326-9329, including *all* data from the DEEP/ULTRADEEP layers in the COSMOS field.
 
