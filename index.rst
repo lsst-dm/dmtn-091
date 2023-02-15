@@ -43,7 +43,8 @@ Dataset Types and Goals
 
 We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant to span a range of computational requirements, response time, and fidelity of performance measurements.
 
-1. CI
+CI
+--
 
   - Goals
 
@@ -65,7 +66,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     - Single-Frame Processing
 
 
-2. SMALL
+SMALL
+-----
 
   - Goals
 
@@ -93,7 +95,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     - Forced Photometry
 
 
-3. MEDIUM
+MEDIUM
+------
 
   - Goals
 
@@ -119,7 +122,8 @@ We identify 4 scales of datasets: CI, SMALL, MEDIUM, and LARGE.  These are meant
     - Forced Photometry
 
 
-4. LARGE
+LARGE
+-----
 
   - Requirements
 
@@ -154,9 +158,10 @@ DRP Test Datasets
 The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales: testdata_ci_hsc, HSC RC2, and HSC PDR1.
 
 CI
-==
+--
 
-1. `validation_data_{cfht,decam}`
+`validation_data_{cfht,decam}`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HSC, see next section). These are
 
@@ -166,13 +171,15 @@ There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HS
 Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repositories also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
 
 SMALL
-=====
+-----
 
-1. `testdata_ci_hsc`
+`testdata_ci_hsc`
+^^^^^^^^^^^^^^^^^
 
 The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
-2. https://github.com/lsst/validation_data_hsc
+https://github.com/lsst/validation_data_hsc
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   - 56 GB raw + master calibrations
   - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data
@@ -181,9 +188,10 @@ The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes
   - Currently not used for DIA.
 
 MEDIUM
-======
+------
 
-1. HSC RC2
+HSC RC2
+^^^^^^^
 
 The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots, and an uplodate of the results of `validate_drp` to SQuaSH.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
 
@@ -349,7 +357,8 @@ The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM
 
 This dataset satisfies the definition above for a MEDIUM dataset.
 
-2. HSC RC3 (proposed)
+HSC RC3 (proposed)
+^^^^^^^^^^^^^^^^^^
 
 As survey operations approaches and our ability to process and analyze larger datasets increases, there is a need for a dataset that is more substantial than RC2, allowing us to identify and test the handling of more "edge cases" by the science pipelines. We thus propose the creation of an HSC "RC3" dataset that has the following characteristics:
 
@@ -389,9 +398,10 @@ This section is a condensed encapsulation of discussion that took place on `this
 
 
 LARGE
-=====
+-----
 
-1. HSC SSP PDR1 and PDR2
+HSC SSP PDR1 and PDR2
+^^^^^^^^^^^^^^^^^^^^^
 
 The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
 
@@ -412,15 +422,17 @@ It is appropriate for DRP and for AP testing and performance monitoring.  As wit
 
 
 DESIRED DATASETS
-================
+----------------
 
 In the future, there are at least two additional dataset needs:
 
-1. Less Large LARGE
+Less Large LARGE
+^^^^^^^^^^^^^^^^
 
 Some important features of data are sufficiently rare that it's hard to include all of them simultaneously in just the three tracts of the RC dataset.  A dataset between the RC and PDR1/2 scales, run perhaps on monthly timescales (especially if RC processing can be done weekly as automation improves), would be useful to ensure coverage of those features.  10-15 tracts is probably the right scale.
 
-2. Missing Features
+Missing Features
+^^^^^^^^^^^^^^^^
 
 Three important data features are missed in all of the datasets described above, as they are generically missing all datasets that are subsets of HSC SSP PDR1/2 and RC2:
 
@@ -433,7 +445,7 @@ Three important data features are missed in all of the datasets described above,
 A (not yet identified) DECam dataset could potentially address all of these issues, but characterizing the properties of DECam at the level already done for HSC may be difficult, and would probably be necessary to fully test the DM algorithms for which DCR and wavefront sensors are relevant (e.g., physically-motivated PSF modeling).  Many non-PDR1/2+RC2 HSC datasets do include more interesting variability or crowded fields, so it *might* be most efficient to just add one of these to our test data suite, and defer some testing of DCR or wavefront-sensor algorithms until data from ComCam or even the full LSST camera are available.
 
 DRP Summary
-===========
+-----------
 
 CI, SMALL, MEDIUM, and LARGE datasets exist suitable for significant amount of Science Pipelines performance monitoring.  The addition of a dataset on a crowded field would help exercise a key portion of the Science Pipelines that currently is uncertain.  Technical investigations of (1) using wavefront-sensor data and (2) a system without an ADC may wait until commissioning data is available from ComCam or the full LSSTCam.
 
@@ -466,18 +478,20 @@ Desiderata for AP testing:
   - LSST-like cadences to test Solar System Orbit algorithms
 
 CI
-==
+--
 
-1. DECam HiTS
+DECam HiTS
+^^^^^^^^^^
 
   - A subset of data intended for CI AP testing (with Blind15A_40 and Blind15A_42) is in https://github.com/lsst/ap_verify_ci_hits2015
 
 This subset is only 3 visits and 2 CCDs per visit.
 
 SMALL
-=====
+-----
 
-1. DECam HiTS
+DECam HiTS
+^^^^^^^^^^
 
   - Available on lsst-dev in `/datasets/decam/_internal/raw/hits`
   - Total of 2269 visits available
@@ -486,9 +500,10 @@ SMALL
   - Blind15A_26, Blind15A_40, and Blind15A_42 have been selected for AP testing in https://github.com/lsst/ap_verify_hits2015
 
 MEDIUM
-======
+------
 
-1. HSC SSP PDR1+PDR2
+HSC SSP PDR1+PDR2
+^^^^^^^^^^^^^^^^^
 
   - Planned work to build templates from PDR1 and then run subtractions from the new data in PDR2 from later years.
 
@@ -499,9 +514,10 @@ It's less clear that it's feasible to do active regular testing of DIA on LARGE 
 
 
 AP Candidate Additional Datasets
-================================
+--------------------------------
 
-1. DECam DES SN fields
+DECam DES SN fields
+^^^^^^^^^^^^^^^^^^^
 
   - 8 shallow SN fields, 2 deep SN fields
   - griz observation sequences obtained ~ weekly
@@ -512,27 +528,31 @@ AP Candidate Additional Datasets
   - Visits = [371412, 371413, 376667, 376668, 379288, 379289, 379290, 381528, 381529]
   - Available on lsst-dev in `/datasets/des_sn/repo_Y2`
 
-2. HSC New Horizons
+HSC New Horizons
+^^^^^^^^^^^^^^^^
 
   - Crowded stellar field (Galactic Bulge)
   - Available to us (not fully public?); unclear details of numbers of epochs, etc.
   - Scientifically untapped
   - Available on lsst-dev at `/datasets/hsc/raw/newhorizons/`
 
-3. DECam Bulge survey
+DECam Bulge survey
+^^^^^^^^^^^^^^^^^^
 
   - Crowded stellar field
   - Propoasal ID 2013A-0719 (PI Saha)
   - Limited publications to date: 2017AJ....154...85V; total boundaries of survey unclear.
   - Published example shows that globular cluster M5 field has 50+ observations over 2+ seasons in each of ugriz
 
-4. DECam NEO survey
+DECam NEO survey
+^^^^^^^^^^^^^^^^
 
   - PI L. Allen
   - 320 square degrees; 5 epochs a night in a single filter with 5 minute cadence, repeating for three nights
   - 3 seasons of data
 
-5. HSC SSP Deep or Ultra-Deep:
+HSC SSP Deep or Ultra-Deep
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   - grizy; exposure times 3-5 minutes; tens of epochs available
   - Two UD fields and 15 deep fields
@@ -540,7 +560,8 @@ AP Candidate Additional Datasets
   - Tens of epochs over a couple of nights for a range of fields
   - GAMA09 and VVDS overlap SSP wide (only) but Yoshida reports the seeing was bad (~1")
 
-6. Deep DECam Outer Solar System Survey (DDOSSS)
+Deep DECam Outer Solar System Survey (DDOSSS)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   - P.I. D. Trilling.
   - 13 total nights across 2019A, B semesters.
@@ -599,14 +620,14 @@ Practical Notes
 ===============
 
 Calibration
-===========
+-----------
 
 Master calibration images will be required prior to processing.  We will not be testing the generation of these master calibration images as part of the processing of these datasets for CI, SMALL, and MEDIUM datasets.  Such generation is suitable for processing with LARGE datasets, but full testing of calibration should be the subject of a separate effort and planning and additional supporting documentation.
 
 Astrometric and photometric reference catalogs will be required for each dataset.
 
 Jenkins vs. NCSA
-================
+----------------
 
 The above goals and dataset definitions are written with the NCSA Verification Cluster in mind.
 The current Jenkins AWS solution has a much smaller number of available cores than the NCSA Verification Cluster.  These limitations mean that the CI and SMALL datasets are suited to Jenkins.  It would be _possible_ to do occasional MEDIUM runs through Jenkins, but it's likely more efficient to run them at NCSA.
@@ -619,7 +640,7 @@ October, 2019: Jenkins is now running at the LDF in the same configuration of a 
 Future Work
 ===========
 
-1. Specify as-realized datasets on disk based on these recommendations.
+- Specify as-realized datasets on disk based on these recommendations.
 
 
 .. .. rubric:: References
