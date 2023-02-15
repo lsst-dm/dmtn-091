@@ -349,7 +349,7 @@ The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM
 
 This dataset satisfies the definition above for a MEDIUM dataset.
 
-1. HSC RC3 (proposed)
+2. HSC RC3 (proposed)
 
 As survey operations approaches and our ability to process and analyze larger datasets increases, there is a need for a dataset that is more substantial than RC2, allowing us to identify and test the handling of more "edge cases" by the science pipelines. We thus propose the creation of an HSC "RC3" dataset that has the following characteristics:
 
