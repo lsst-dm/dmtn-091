@@ -372,7 +372,7 @@ As survey operations approaches and our ability to process and analyze larger da
 
 **Proposal:**
 
-Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we propose to include *all* COSMOS data in RC3, plus adjacent tracts from the WIDE footprint that create a contiguous field extending to the "edge" of the survey footprint. (Suggestion: include tracts 9812-9814, 9569-9572, and 9326-9329; see the figure below for a map of HSC tracts.) This enables all of the following:
+We will retain all data that are currently part of RC2, which were selected to represent some edge cases. All data proposed below will be in addition to the existing RC2 data. Because the COSMOS field lies within a larger WIDE region of the HSC-SSP, we propose to include *all* COSMOS data in RC3, plus adjacent tracts from the WIDE footprint that create a contiguous field extending to the "edge" of the survey footprint. (Suggestion: include tracts 9812-9814, 9569-9572, and 9326-9329; see the figure below for a map of HSC tracts.) This enables all of the following:
 
   - Full survey depth coadds in the COSMOS field.
   - COSMOS "truth" table of deep HST galaxy, star, and transient/variable measurements for comparison.
