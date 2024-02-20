@@ -190,6 +190,31 @@ https://github.com/lsst/validation_data_hsc
 MEDIUM
 ------
 
+rc2_subset
+^^^^^^^^^^
+
+The `rc2_subset` dataset is a subset of the large "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
+This dataset is processed through the entire Data Release Production (DRP) pipelines nightly for CI and data quality metrics monitoring purposes.
+It is also used as a standalone dataset for tutorials and examples for using the data butler and the Science Pipelines.
+Because it was intended to be small, `rc2_subset` should not be treated as a dataset intended for passing milestones or testing normative requirements.
+
+The dataset consists of 5 central detectors plus one additional detector separated from the others (see figure below), for 8 randomly chosen visits in five HSC broadband filters -- HSC-G, HSC-R, HSC-I, HSC-Z, and HSC-Y.
+These were specifically chosen from the COSMOS field (tract 9813 in the "hsc_rings_v1" skymap), so that translational dithers are minimal and the individual chips overlap each other.
+
+.. figure:: /_static/rc2_subset_detectors.png
+    :name: fig-rc2_subset_detectors
+
+    Map of the HSC detectors in the focal plane, showing the 6 detectors (outlined in blue) included in the rc2_subset dataset. Note that the separation of one detector from the five centrally-located ones was an error that occurred during creation of the dataset. Because this dataset was in use for a long time before noticing this issue, we have retained it in this state for consistency with previous results based on rc2_subset.
+
+These data are regularly run through all steps of the DRP pipeline, from single-frame through coaddition. Some custom configuration is necessary, however, for FGCM. The pipeline definition YAML file containing this custom configuration can be found in $DRP_PIPE_DIR/pipelines/HSC/DRP-RC2_subset.yaml (where $DRP_PIPE_DIR gives the local path to the set-up version of `the drp_pipe package <https://github.com/lsst/drp_pipe/tree/main>`).
+
+More about volume of dataset, processing time, etc.
+
+`on github <https://github.com/lsst/rc2_subset>`
+
+DC2 test-med-1
+^^^^^^^^^^^^^^
+
 HSC RC2
 ^^^^^^^
 
