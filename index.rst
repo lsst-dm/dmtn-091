@@ -217,7 +217,7 @@ List the visits?
 DC2-test-med-1
 ^^^^^^^^^^^^^^
 
-The `DC2-test-med-1` dataset is made up of two tracts from the DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper<https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note<https://arxiv.org/abs/2101.04855>`_).
+The `DC2-test-med-1` dataset is made up of two tracts from the DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper <https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note <https://arxiv.org/abs/2101.04855>`_).
 
 
 
