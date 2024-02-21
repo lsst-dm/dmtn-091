@@ -206,14 +206,33 @@ These were specifically chosen from the COSMOS field (tract 9813 in the "hsc_rin
 
     Map of the HSC detectors in the focal plane, showing the 6 detectors (outlined in blue) included in the rc2_subset dataset. Note that the separation of one detector from the five centrally-located ones was an error that occurred during creation of the dataset. Because this dataset was in use for a long time before noticing this issue, we have retained it in this state for consistency with previous results based on rc2_subset.
 
-These data are regularly run through all steps of the DRP pipeline, from single-frame through coaddition. Some custom configuration is necessary, however, for FGCM. The pipeline definition YAML file containing this custom configuration can be found in $DRP_PIPE_DIR/pipelines/HSC/DRP-RC2_subset.yaml (where $DRP_PIPE_DIR gives the local path to the set-up version of `the drp_pipe package <https://github.com/lsst/drp_pipe/tree/main>`).
+These data are regularly run through all steps of the DRP pipeline, from single-frame through coaddition. Some custom configuration is necessary, however, for FGCM. The pipeline definition YAML file containing this custom configuration can be found in $DRP_PIPE_DIR/pipelines/HSC/DRP-RC2_subset.yaml (where $DRP_PIPE_DIR gives the local path to the set-up version of `the drp_pipe package <https://github.com/lsst/drp_pipe/tree/main>`_).
 
 More about volume of dataset, processing time, etc.
 
-`on github <https://github.com/lsst/rc2_subset>`
+List the visits?
 
-DC2 test-med-1
+`on github <https://github.com/lsst/rc2_subset>`_
+
+DC2-test-med-1
 ^^^^^^^^^^^^^^
+
+The `DC2-test-med-1` dataset is made up of two tracts from the DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper<https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note<https://arxiv.org/abs/2101.04855>`_).
+
+
+
++-------+--------+-----------+----------------------------+
+| Tract | Band   | NumVisits | VisitList                  |
++=======+========+===========+============================+
+| 3828  | u      | 22        | 2336, 2337, 179999, 180000, 180001, 200936, 218326, 219143, 235057, 235058, 235149, 277060, 277061, 277093, 431192, 431193, 431405, 433038, 466711, 466712, 466756, 466758  |
++-------+--------+-----------+----------------------------+
+| 3828  | g      | 28        | 159471, 159491, 183772, 183773, 183818, 183912, 193780, 193781, 193827, 221574, 221575, 221614, 221616, 254358, 254359, 254379, 254380, 254381, 254407, 400440, 419000, 419806, 430094, 466279, 479264, 480908, 484236, 484266 |
++-------+--------+-----------+----------------------------+
+| 3828  | r      | 64        | 162699, 181901, 193111, 193144, 193147, 193189, 193232, 193233, 193235, 193848, 193888, 199651, 202587, 202590, 202617, 202618, 202627, 202628, 212071, 212085, 212118, 212119, 212127, 212704, 212739, 212805, 212806, 213513, 213514, 213545, 219950, 236788, 236833, 242597, 252377, 252422, 252424, 257768, 257797, 271328, 271331, 300250, 300252, 398407, 398413, 401616, 401660, 414873, 415029, 416955, 436491, 436492, 436538, 440938, 448317, 451452, 451489, 451502, 452556, 452557, 456690, 456716, 467701, 479434 |
+| 3828  | i      |  78       | 174534, 177481, 192355, 204706, 204708, 211099, 211100, 211132, 211140, 211141, 211198, 211228, 211477, 211478, 211483, 211484, 211490, 211527, 211530, 211531, 211533, 211545, 214433, 214434, 214464, 214465, 214467, 227950, 227951, 227976, 227984, 228020, 228092, 230740, 230775, 244004, 244005, 244028, 244029, 244068, 248966, 248970, 256383, 263452, 263453, 263455, 263501, 263502, 263511, 280217, 280271, 397278, 397279, 397322, 397330, 397331, 410996, 421682, 421725, 427674, 428492, 428525, 433960, 433962, 433992, 433993, 457681, 457721, 457723, 457749, 471963, 471987, 472179, 479620, 491550, 496959, 496960, 496989 |
+| 3828  | z      | 38        | 7997, 7998, 8003, 8029, 13288, 32680, 187502, 187533, 187556, 209015, 209018, 209031, 209032, 209061, 209062, 209063, 209068, 209843, 226983, 227030, 240852, 243019, 243021, 265317, 303559, 408907, 408941, 426672, 426969, 427030, 427069, 460088, 460130, 460131, 462543, 462714, 474849, 474890 |
+| 3828  | y      | 58        | 5884, 5886, 5891, 12454, 12466, 12471, 12481, 37656, 37657, 37658, 167863, 167864, 169763, 169812, 169838, 169839, 189315, 189317, 189318, 189382, 190282, 190503, 191217, 206021, 206031, 206033, 206039, 206050, 206073, 206120, 207784, 207791, 266115, 266117, 266118, 266127, 282444, 282445, 282446, 306181, 306182, 306188, 390558, 406992, 406996, 407919, 407950, 407951, 425484, 443127, 444706, 444725, 456651, 458252, 458253, 458254, 458255, 492028 |
++-------+----------+-----------+----------------------------+
 
 HSC RC2
 ^^^^^^^
