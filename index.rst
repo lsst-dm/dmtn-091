@@ -160,32 +160,22 @@ The DRP team semi-regularly processes three datasets (all public Subaru Hyper Su
 CI
 --
 
-`validation_data_{cfht,decam}`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HSC, see next section). These are
-
-  - https://github.com/lsst/validation_data_decam
-  - https://github.com/lsst/validation_data_cfht
-
-Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repositories also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
-
-SMALL
------
-
 `testdata_ci_hsc`
 ^^^^^^^^^^^^^^^^^
 
 The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
-https://github.com/lsst/validation_data_hsc
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  - 56 GB raw + master calibrations
-  - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data
-  - Calibration data available as pre-computed masters and used to do ISR
-  - Currently processed on a daily (8 hour?) cadence through to coadd
-  - Currently not used for DIA.
+`ci_imsim`
+^^^^^^^^^^
+
+
+
+SMALL
+-----
+
+
+
 
 MEDIUM
 ------
@@ -226,7 +216,7 @@ This DC2 dataset is reprocessed monthly at the USDF using the full DRP pipeline,
 
 The `DC2-test-med-1` data are currently available in a shared Butler repository at the USDF as `/repo/dc2`. The `DC2-test-med-1` dataset was defined on Jira tickets `DM-22954 <https://jira.lsstcorp.org/browse/DM-22954>`_ and `DM-22816 <https://jira.lsstcorp.org/browse/DM-22816>`_.
 
-The coadds reach average 5-sigma point-source depths (averaged over all patches in both tracts) of (25.9, 26.3, 25.9, 25.4, 24.0, 23.4) in (`u`, `g`, `r`, `i`, `z`, `y`) bands, equivalent to roughly the expected depth of five years of the LSST survey.
+The coadds reach average 5-sigma point-source depths (averaged over all patches in both tracts) of (25.9, 26.3, 25.9, 25.4, 24.0, 23.4) mag in (`u`, `g`, `r`, `i`, `z`, `y`) bands, equivalent to roughly the expected depth of five years of the LSST survey.
 
 +-------+-------+-----------+----------------------------+
 | Tract | Band  | NumVisits | VisitList                  |
