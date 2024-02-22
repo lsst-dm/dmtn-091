@@ -226,7 +226,7 @@ This DC2 dataset is reprocessed monthly at the USDF using the full DRP pipeline,
 
 The `DC2-test-med-1` data are currently available in a shared Butler repository at the USDF as `/repo/dc2`. The `DC2-test-med-1` dataset was defined on Jira tickets `DM-22954 <https://jira.lsstcorp.org/browse/DM-22954>`_ and `DM-22816 <https://jira.lsstcorp.org/browse/DM-22816>`_.
 
-The coadds reach average 5\\sigma point-source depths (averaged over all patches in both tracts) of (25.9, 26.3, 25.9, 25.4, 24.0, 23.4) in (`u`, `g`, `r`, `i`, `z`, `y`) bands, equivalent to roughly the expected depth of five years of the LSST survey.
+The coadds reach average 5-sigma point-source depths (averaged over all patches in both tracts) of (25.9, 26.3, 25.9, 25.4, 24.0, 23.4) in (`u`, `g`, `r`, `i`, `z`, `y`) bands, equivalent to roughly the expected depth of five years of the LSST survey.
 
 +-------+-------+-----------+----------------------------+
 | Tract | Band  | NumVisits | VisitList                  |
