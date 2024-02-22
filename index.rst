@@ -180,7 +180,7 @@ SMALL
 rc2_subset
 ^^^^^^^^^^
 
-The `rc2_subset` dataset is a subset of the large "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
+The `rc2_subset` dataset is a subset of the larger "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
 This dataset is processed through the entire Data Release Production (DRP) pipelines nightly for CI and data quality metrics monitoring purposes.
 It is also used as a standalone dataset for tutorials and examples for using the data butler and the Science Pipelines.
 Because it was intended to be small, `rc2_subset` should not be treated as a dataset intended for passing milestones or testing normative requirements.
@@ -411,7 +411,7 @@ HSC RC2
 
 The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed monthly using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including tasks that are not included in `ci_hsc`) as well as `analysis_tools` tasks, which generate a large suite of validation plots and associated metrics that are uploaded to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and monitored on chronograf dashboards.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
 
-The HSC RC2 data is presently (2024-02-21) available at the USDF in `/repo/main/hsc`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
+The HSC RC2 data is presently (2024-02-21) available at the USDF in a shared Butler repository at `/repo/main/hsc`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
 Particular attention was paid in defining this dataset for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
