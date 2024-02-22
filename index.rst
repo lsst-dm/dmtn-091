@@ -166,9 +166,12 @@ CI
 The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
 
-`ci_imsim`
-^^^^^^^^^^
-FIND AND ADD SOME DETAILS HERE.
+`testdata_ci_imsim`
+^^^^^^^^^^^^^^^^^^^
+
+The `testdata_ci_imsim` package (https://github.com/lsst/testdata_ci_imsim) is intended to be similar to `testdata_ci_hsc`, but with simulated data from DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper <https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note <https://arxiv.org/abs/2101.04855>`_) instead of HSC data. The input data consists of 6 CCD images in each of the `ugrizy` bands, plus pre-generated calibrations (darks, flats, biases, detector defect files, and reference catalogs). These data total 5.5 GB. The `ci_imsim` package is run to process the `testdata_ci_imsim` data in developer-initiated CI runs on development branches. Typically both `ci_hsc` and `ci_imsim` are run in CI to confirm that the ticket being checked does not cause any issues in pipeline execution. Both by name and content, this is a CI-level dataset as defined above.
+
+.. See https://jira.lsstcorp.org/browse/DM-26083
 
 
 SMALL
