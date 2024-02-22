@@ -82,7 +82,7 @@ SMALL
 
   - Requirements
 
-    - 1 hour on 16-32 cores
+    - Less than 8 hours on 16-32 cores
     - Coadd at least 5 detectors
     - Run image-image DIA
 
@@ -168,17 +168,11 @@ The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes
 
 `ci_imsim`
 ^^^^^^^^^^
-
+FIND AND ADD SOME DETAILS HERE.
 
 
 SMALL
 -----
-
-
-
-
-MEDIUM
-------
 
 rc2_subset
 ^^^^^^^^^^
@@ -204,8 +198,9 @@ List the visits?
 
 `on github <https://github.com/lsst/rc2_subset>`_
 
-LARGE
------
+
+MEDIUM
+------
 
 DC2-test-med-1
 ^^^^^^^^^^^^^^
@@ -573,7 +568,11 @@ The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM
 | UD_COSMOS | 9813  | TOTAL  | 177       | Size: 3.2 TB               |
 +-----------+-------+--------+-----------+----------------------------+
 
-This dataset satisfies the definition above for a LARGE dataset.
+This dataset satisfies the definition above for a MEDIUM dataset.
+
+LARGE
+-----
+
 
 HSC RC3 (proposed)
 ^^^^^^^^^^^^^^^^^^
