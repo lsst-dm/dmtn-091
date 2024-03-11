@@ -25,16 +25,16 @@ We start with a summary recommendation for a minimal set of datasets that would 
 We next define and provide guidelines for the processing workflow and cadence, and monitoring and assessment of test datasets divided into groups.  We refer to these groups as CI, SMALL, MEDIUM, and LARGE datasets.
 We finally present more detailed discussion of the existing and near-future planned datasets for DRP and AP Science Performance monitoring.
 
-We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 23 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.
+We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 32 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.
 
 
 =================
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in the future.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through monthly processing of the HSC RC2 dataset from the SSP survey and the DESC DC2 simulated dataset, supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields.
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
-3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
+3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through USDF and Jenkins and are being monitored in SQuaSH.
 
 
 =======================
@@ -155,7 +155,7 @@ The SDM Standardization process to generate the DPDD should always be run for at
 DRP Test Datasets
 =================
 
-The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales: testdata_ci_hsc, HSC RC2, and HSC PDR1.
+The DRP team semi-regularly processes many of the following datasets at different scales.
 
 CI
 --
@@ -180,12 +180,12 @@ SMALL
 rc2_subset
 ^^^^^^^^^^
 
-The `rc2_subset` dataset is a subset of the larger "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
+The `rc2_subset <https://github.com/lsst/rc2_subset>`_ dataset is a subset of the larger "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
 This dataset is processed through the entire Data Release Production (DRP) pipelines nightly for CI and data quality metrics monitoring purposes.
 It is also used as a standalone dataset for tutorials and examples for using the data butler and the Science Pipelines.
 Because it was intended to be small, `rc2_subset` should not be treated as a dataset intended for passing milestones or testing normative requirements.
 
-The dataset consists of 5 central detectors plus one additional detector separated from the others (see figure below), for 8 randomly chosen visits in five HSC broadband filters -- HSC-G, HSC-R, HSC-I, HSC-Z, and HSC-Y.
+The dataset consists of 5 central detectors plus one additional detector separated from the others (see figure below), for 8 randomly chosen visits in each of five HSC broadband filters -- HSC-G, HSC-R, HSC-I, HSC-Z, and HSC-Y.
 These were specifically chosen from the COSMOS field (tract 9813 in the "hsc_rings_v1" skymap), so that translational dithers are minimal and the individual chips overlap each other.
 
 .. figure:: /_static/rc2_subset_detectors.png
@@ -194,12 +194,6 @@ These were specifically chosen from the COSMOS field (tract 9813 in the "hsc_rin
     Map of the HSC detectors in the focal plane, showing the 6 detectors (outlined in blue) included in the rc2_subset dataset. Note that the separation of one detector from the five centrally-located ones was an error that occurred during creation of the dataset. Because this dataset was in use for a long time before noticing this issue, we have retained it in this state for consistency with previous results based on rc2_subset.
 
 These data are regularly run through all steps of the DRP pipeline, from single-frame through coaddition. Some custom configuration is necessary, however, for FGCM. The pipeline definition YAML file containing this custom configuration can be found in $DRP_PIPE_DIR/pipelines/HSC/DRP-RC2_subset.yaml (where $DRP_PIPE_DIR gives the local path to the set-up version of `the drp_pipe package <https://github.com/lsst/drp_pipe/tree/main>`_).
-
-More about volume of dataset, processing time, etc.
-
-List the visits?
-
-`on github <https://github.com/lsst/rc2_subset>`_
 
 
 MEDIUM
@@ -210,7 +204,7 @@ DC2-test-med-1
 
 The `DC2-test-med-1` dataset is made up of two tracts from the DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper <https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note <https://arxiv.org/abs/2101.04855>`_). Tract 3828 contains a total of 288 visits over the six `ugrizy` bands, and tract 3829 has 227 contributing visits.
 
-This DC2 dataset is reprocessed monthly at the USDF using the full DRP pipeline, which includes standard single-frame processing on through coaddition, as well as difference imaging. Data quality plots are generated by `analysis_tools` tasks, and their associated data quality metrics are dispatched to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and displayed on chronograf dashboards for monitoring.
+This DC2 dataset is reprocessed monthly at the USDF using the full DRP pipeline, which includes standard single-frame processing and onward through coaddition, as well as difference imaging. Data quality plots are generated by `analysis_tools` tasks, and their associated data quality metrics are dispatched to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and displayed on chronograf dashboards for monitoring.
 
 The `DC2-test-med-1` data are currently available in a shared Butler repository at the USDF as `/repo/dc2`. The `DC2-test-med-1` dataset was defined on Jira tickets `DM-22954 <https://jira.lsstcorp.org/browse/DM-22954>`_ and `DM-22816 <https://jira.lsstcorp.org/browse/DM-22816>`_.
 
@@ -409,15 +403,15 @@ The coadds reach average 5-sigma point-source depths (averaged over all patches 
 HSC RC2
 ^^^^^^^
 
-The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed monthly using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including tasks that are not included in `ci_hsc`) as well as `analysis_tools` tasks, which generate a large suite of validation plots and associated metrics that are uploaded to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and monitored on chronograf dashboards.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
+The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed monthly using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including tasks that are not included in `ci_hsc`) as well as `analysis_tools` tasks, which generate a large suite of validation plots and associated metrics that are uploaded to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and monitored on chronograf dashboards.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset.
 
 The HSC RC2 data is presently (2024-02-21) available at the USDF in a shared Butler repository at `/repo/main/hsc`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
-Particular attention was paid in defining this dataset for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
+Particular attention was paid in defining this dataset for it to consist of mostly good data plus some specific cases known to be more challenging (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
-The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_
+The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_.
 
-The DM Tech Note `DMTN-088 <https://dmtn-088.lsst.io/>`_ provides a brief introduction to the processing of this dataset at the LSST Data Facility (LDF).  There are some updates in the un-merged branch `DMTN-088 (DM-15546) <https://dmtn-088.lsst.io/v/DM-15546/index.html>`_
+.. The DM Tech Note `DMTN-088 <https://dmtn-088.lsst.io/>`_ provides a brief introduction to the processing of this dataset at the LSST Data Facility (LDF).  There are some updates in the un-merged branch `DMTN-088 (DM-15546) <https://dmtn-088.lsst.io/v/DM-15546/index.html>`_
 
 The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM-11345 <https://jira.lsstcorp.org/browse/DM-11345?focusedCommentId=90372&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-90372>`_ to be:
 
@@ -620,7 +614,7 @@ This section is a condensed encapsulation of discussion that took place on `this
 HSC SSP PDR1 and PDR2
 ^^^^^^^^^^^^^^^^^^^^^
 
-The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
+The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large datasets could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
 
 See reports at:
 
