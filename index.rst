@@ -409,7 +409,7 @@ The HSC RC2 data is presently (2024-02-21) available at the USDF in a shared But
 
 Particular attention was paid in defining this dataset for it to consist of mostly good data plus some specific cases known to be more challenging (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
-The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_.
+.. The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_.
 
 .. The DM Tech Note `DMTN-088 <https://dmtn-088.lsst.io/>`_ provides a brief introduction to the processing of this dataset at the LSST Data Facility (LDF).  There are some updates in the un-merged branch `DMTN-088 (DM-15546) <https://dmtn-088.lsst.io/v/DM-15546/index.html>`_
 
