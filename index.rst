@@ -25,16 +25,16 @@ We start with a summary recommendation for a minimal set of datasets that would 
 We next define and provide guidelines for the processing workflow and cadence, and monitoring and assessment of test datasets divided into groups.  We refer to these groups as CI, SMALL, MEDIUM, and LARGE datasets.
 We finally present more detailed discussion of the existing and near-future planned datasets for DRP and AP Science Performance monitoring.
 
-We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 23 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.
+We provide some approximate sizes of datasets here, however the singular reference for all sizing is the Data Management Sizing Model, `DMTN-135 <https://dmtn-135.lsst.io/>`_. Table 32 in `DMTN-135 <https://dmtn-135.lsst.io/>`_ provides current values for dataset sizes.
 
 
 =================
 Executive Summary
 =================
 
-1. DRP Scientific Performance Monitoring can be primarily accomplished through a monthly processing of the HSC RC2 dataset from the SSP survey supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields. The DESC DC2 simulated dataset should also be included in the future.
+1. DRP Scientific Performance Monitoring can be primarily accomplished through monthly processing of the HSC RC2 dataset from the SSP survey and the DESC DC2 simulated dataset, supplemented by less frequent processing of the much larger HSC PDR2. This needs to be supplemented by HSC observations in crowded fields.
 2. AP Scientific Performance Monitoring can be accomplished through analysis of the DECam HiTS survey, HSC SSP PRD2-PDR1, *plus* an additional high-cadence multi-band survey.
-3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through NCSA and Jenkins and are being monitored in SQuaSH.
+3. Datasets for Continuous Integration (CI)-level tests and regression monitoring can be constructed out of subsets from the full DRP and AP dastasets identified above.  Several such datasets currently exist and are being regularly tested through USDF and Jenkins and are being monitored in SQuaSH.
 
 
 =======================
@@ -82,7 +82,7 @@ SMALL
 
   - Requirements
 
-    - 1 hour on 16-32 cores
+    - Less than 8 hours on 16-32 cores
     - Coadd at least 5 detectors
     - Run image-image DIA
 
@@ -155,101 +155,311 @@ The SDM Standardization process to generate the DPDD should always be run for at
 DRP Test Datasets
 =================
 
-The DRP team semi-regularly processes three datasets (all public Subaru Hyper Suprime-Cam data) at different scales: testdata_ci_hsc, HSC RC2, and HSC PDR1.
+The DRP team semi-regularly processes many of the following datasets at different scales.
 
 CI
 --
-
-`validation_data_{cfht,decam}`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There are "validation_data" CI-sized datasets for each of CFHT and DECam (and HSC, see next section). These are
-
-  - https://github.com/lsst/validation_data_decam
-  - https://github.com/lsst/validation_data_cfht
-
-Each of these is part of CI and regularly used for simple execution testing and coarse performance tracking.  There is no ISR, coadd, or DIA processing run.  These data repositories also contain reference versions of processed data to ease comparison of specific steps without re-processing the full set of data.
-
-SMALL
------
 
 `testdata_ci_hsc`
 ^^^^^^^^^^^^^^^^^
 
 The `testdata_ci_hsc` package (https://github.com/lsst/testdata_ci_hsc) includes just enough data to exercise the main steps of the current pipeline: single-frame processing, coaddition, and coadd processing.  The input data comprises 33 CCD images from 12 HSC visits in r and i band, pre-made master darks, dome flats, sky flats, biases and detector defect files for these, and the necessary subset of the PS1-PV3 reference catalog.  These data total 8.3 GB.  The `ci_hsc` package is run to process the `testdata_ci_hsc` data automatically on a nightly basis by the CI system and can be explicitly included in developer-initiated CI runs on development branches.  The package also includes some simple tests to make sure that the expected outputs exist, but practically no tests of algorithmic or scientific correctness.  Both by name and content, this is a CI-level dataset as defined above.
 
-https://github.com/lsst/validation_data_hsc
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  - 56 GB raw + master calibrations
-  - The entire `validation_data_hsc` repo is 250 GB because it includes a set of single-frame- and coadd-processed data
-  - Calibration data available as pre-computed masters and used to do ISR
-  - Currently processed on a daily (8 hour?) cadence through to coadd
-  - Currently not used for DIA.
+`testdata_ci_imsim`
+^^^^^^^^^^^^^^^^^^^
+
+The `testdata_ci_imsim` package (https://github.com/lsst/testdata_ci_imsim) is intended to be similar to `testdata_ci_hsc`, but with simulated data from DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper <https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note <https://arxiv.org/abs/2101.04855>`_) instead of HSC data. The input data consists of 6 CCD images in each of the `ugrizy` bands, plus pre-generated calibrations (darks, flats, biases, detector defect files, and reference catalogs). These data total 5.5 GB. The `ci_imsim` package is run to process the `testdata_ci_imsim` data in developer-initiated CI runs on development branches. Typically both `ci_hsc` and `ci_imsim` are run in CI to confirm that the ticket being checked does not cause any issues in pipeline execution. Both by name and content, this is a CI-level dataset as defined above.
+
+.. See https://jira.lsstcorp.org/browse/DM-26083
+
+
+SMALL
+-----
+
+rc2_subset
+^^^^^^^^^^
+
+The `rc2_subset <https://github.com/lsst/rc2_subset>`_ dataset is a subset of the larger "HSC RC2" dataset that contains sufficient data to enable full, end-to-end processing with the Science Pipelines in a reasonable (few hours) time.
+This dataset is processed through the entire Data Release Production (DRP) pipelines nightly for CI and data quality metrics monitoring purposes.
+It is also used as a standalone dataset for tutorials and examples for using the data butler and the Science Pipelines.
+Because it was intended to be small, `rc2_subset` should not be treated as a dataset intended for passing milestones or testing normative requirements.
+
+The dataset consists of 5 central detectors plus one additional detector separated from the others (see figure below), for 8 randomly chosen visits in each of five HSC broadband filters -- HSC-G, HSC-R, HSC-I, HSC-Z, and HSC-Y.
+These were specifically chosen from the COSMOS field (tract 9813 in the "hsc_rings_v1" skymap), so that translational dithers are minimal and the individual chips overlap each other.
+
+.. figure:: /_static/rc2_subset_detectors.png
+    :name: fig-rc2_subset_detectors
+
+    Map of the HSC detectors in the focal plane, showing the 6 detectors (outlined in blue) included in the rc2_subset dataset. Note that the separation of one detector from the five centrally-located ones was an error that occurred during creation of the dataset. Because this dataset was in use for a long time before noticing this issue, we have retained it in this state for consistency with previous results based on rc2_subset.
+
+These data are regularly run through all steps of the DRP pipeline, from single-frame through coaddition. Some custom configuration is necessary, however, for FGCM. The pipeline definition YAML file containing this custom configuration can be found in $DRP_PIPE_DIR/pipelines/HSC/DRP-RC2_subset.yaml (where $DRP_PIPE_DIR gives the local path to the set-up version of `the drp_pipe package <https://github.com/lsst/drp_pipe/tree/main>`_).
+
 
 MEDIUM
 ------
 
+DC2-test-med-1
+^^^^^^^^^^^^^^
+
+The `DC2-test-med-1` dataset is made up of two tracts from the DESC Data Challenge 2 (DC2; see the `DC2 simulations overview paper <https://ui.adsabs.harvard.edu/abs/2021ApJS..253...31L/abstract>`_ and the `DESC DC2 Data Release Note <https://arxiv.org/abs/2101.04855>`_). Tract 3828 contains a total of 288 visits over the six `ugrizy` bands, and tract 3829 has 227 contributing visits.
+
+This DC2 dataset is reprocessed monthly at the USDF using the full DRP pipeline, which includes standard single-frame processing and onward through coaddition, as well as difference imaging. Data quality plots are generated by `analysis_tools` tasks, and their associated data quality metrics are dispatched to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and displayed on chronograf dashboards for monitoring.
+
+The `DC2-test-med-1` data are currently available in a shared Butler repository at the USDF as `/repo/dc2`. The `DC2-test-med-1` dataset was defined on Jira tickets `DM-22954 <https://jira.lsstcorp.org/browse/DM-22954>`_ and `DM-22816 <https://jira.lsstcorp.org/browse/DM-22816>`_.
+
+The coadds reach average 5-sigma point-source depths (averaged over all patches in both tracts) of (25.9, 26.3, 25.9, 25.4, 24.0, 23.4) mag in (`u`, `g`, `r`, `i`, `z`, `y`) bands, equivalent to roughly the expected depth of five years of the LSST survey.
+
++-------+-------+-----------+----------------------------+
+| Tract | Band  | NumVisits | VisitList                  |
++=======+=======+===========+============================+
+| 3828  | u     | 22        | 2336, 2337, 179999, 180000,|
+|       |       |           | 180001, 200936, 218326,    |
+|       |       |           | 219143, 235057, 235058,    |
+|       |       |           | 235149, 277060, 277061,    |
+|       |       |           | 277093, 431192, 431193,    |
+|       |       |           | 431405, 433038, 466711,    |
+|       |       |           | 466712, 466756, 466758     |
++-------+-------+-----------+----------------------------+
+| 3828  | g     | 28        | 159471, 159491, 183772,    |
+|       |       |           | 183773, 183818, 183912,    |
+|       |       |           | 193780, 193781, 193827,    |
+|       |       |           | 221574, 221575, 221614,    |
+|       |       |           | 221616, 254358, 254359,    |
+|       |       |           | 254379, 254380, 254381,    |
+|       |       |           | 254407, 400440, 419000,    |
+|       |       |           | 419806, 430094, 466279,    |
+|       |       |           | 479264, 480908, 484236,    |
+|       |       |           | 484266                     |
++-------+-------+-----------+----------------------------+
+| 3828  | r     | 64        | 162699, 181901, 193111,    |
+|       |       |           | 193144, 193147, 193189,    |
+|       |       |           | 193232, 193233, 193235,    |
+|       |       |           | 193848, 193888, 199651,    |
+|       |       |           | 202587, 202590, 202617,    |
+|       |       |           | 202618, 202627, 202628,    |
+|       |       |           | 212071, 212085, 212118,    |
+|       |       |           | 212119, 212127, 212704,    |
+|       |       |           | 212739, 212805, 212806,    |
+|       |       |           | 213513, 213514, 213545,    |
+|       |       |           | 219950, 236788, 236833,    |
+|       |       |           | 242597, 252377, 252422,    |
+|       |       |           | 252424, 257768, 257797,    |
+|       |       |           | 271328, 271331, 300250,    |
+|       |       |           | 300252, 398407, 398413,    |
+|       |       |           | 401616, 401660, 414873,    |
+|       |       |           | 415029, 416955, 436491,    |
+|       |       |           | 436492, 436538, 440938,    |
+|       |       |           | 448317, 451452, 451489,    |
+|       |       |           | 451502, 452556, 452557,    |
+|       |       |           | 456690, 456716, 467701,    |
+|       |       |           | 479434                     |
++-------+-------+-----------+----------------------------+
+| 3828  | i     |  78       | 174534, 177481, 192355,    |
+|       |       |           | 204706, 204708, 211099,    |
+|       |       |           | 211100, 211132, 211140,    |
+|       |       |           | 211141, 211198, 211228,    |
+|       |       |           | 211477, 211478, 211483,    |
+|       |       |           | 211484, 211490, 211527,    |
+|       |       |           | 211530, 211531, 211533,    |
+|       |       |           | 211545, 214433, 214434,    |
+|       |       |           | 214464, 214465, 214467,    |
+|       |       |           | 227950, 227951, 227976,    |
+|       |       |           | 227984, 228020, 228092,    |
+|       |       |           | 230740, 230775, 244004,    |
+|       |       |           | 244005, 244028, 244029,    |
+|       |       |           | 244068, 248966, 248970,    |
+|       |       |           | 256383, 263452, 263453,    |
+|       |       |           | 263455, 263501, 263502,    |
+|       |       |           | 263511, 280217, 280271,    |
+|       |       |           | 397278, 397279, 397322,    |
+|       |       |           | 397330, 397331, 410996,    |
+|       |       |           | 421682, 421725, 427674,    |
+|       |       |           | 428492, 428525, 433960,    |
+|       |       |           | 433962, 433992, 433993,    |
+|       |       |           | 457681, 457721, 457723,    |
+|       |       |           | 457749, 471963, 471987,    |
+|       |       |           | 472179, 479620, 491550,    |
+|       |       |           | 496959, 496960, 496989     |
++-------+-------+-----------+----------------------------+
+| 3828  | z     | 38        | 7997, 7998, 8003, 8029,    |
+|       |       |           | 13288, 32680, 187502,      |
+|       |       |           | 187533, 187556, 209015,    |
+|       |       |           | 209018, 209031, 209032,    |
+|       |       |           | 209061, 209062, 209063,    |
+|       |       |           | 209068, 209843, 226983,    |
+|       |       |           | 227030, 240852, 243019,    |
+|       |       |           | 243021, 265317, 303559,    |
+|       |       |           | 408907, 408941, 426672,    |
+|       |       |           | 426969, 427030, 427069,    |
+|       |       |           | 460088, 460130, 460131,    |
+|       |       |           | 462543, 462714, 474849,    |
+|       |       |           | 474890                     |
++-------+-------+-----------+----------------------------+
+| 3828  | y     | 58        | 5884, 5886, 5891, 12454,   |
+|       |       |           | 12466, 12471, 12481, 37656,|
+|       |       |           | 37657, 37658, 167863,      |
+|       |       |           | 167864, 169763, 169812,    |
+|       |       |           | 169838, 169839, 189315,    |
+|       |       |           | 189317, 189318, 189382,    |
+|       |       |           | 190282, 190503, 191217,    |
+|       |       |           | 206021, 206031, 206033,    |
+|       |       |           | 206039, 206050, 206073,    |
+|       |       |           | 206120, 207784, 207791,    |
+|       |       |           | 266115, 266117, 266118,    |
+|       |       |           | 266127, 282444, 282445,    |
+|       |       |           | 282446, 306181, 306182,    |
+|       |       |           | 306188, 390558, 406992,    |
+|       |       |           | 406996, 407919, 407950,    |
+|       |       |           | 407951, 425484, 443127,    |
+|       |       |           | 444706, 444725, 456651,    |
+|       |       |           | 458252, 458253, 458254,    |
+|       |       |           | 458255, 492028             |
++-------+-------+-----------+----------------------------+
+| 3829  | u     | 19        | 2334, 2336, 2337, 2339,    |
+|       |       |           | 179999, 180000, 180001,    |
+|       |       |           | 200750, 200813, 218326,    |
+|       |       |           | 219143, 219917, 235058,    |
+|       |       |           | 277060, 277061, 431405,    |
+|       |       |           | 433038, 466756, 466758     |
++-------+-------+-----------+----------------------------+
+| 3829  | g     | 22        | 159471, 159507, 183772,    |
+|       |       |           | 183818, 193827, 194862,    |
+|       |       |           | 221574, 221575, 221577,    |
+|       |       |           | 221614, 221615, 221616,    |
+|       |       |           | 254358, 254359, 254379,    |
+|       |       |           | 254380, 254381, 254407,    |
+|       |       |           | 271920, 419000, 484236,    |
+|       |       |           | 484266                     |
++-------+-------+-----------+----------------------------+
+| 3829  | r     | 51        | 40327, 162699, 193111,     |
+|       |       |           | 193144, 193147, 193187,    |
+|       |       |           | 193189, 193232, 193233,    |
+|       |       |           | 193235, 193848, 193880,    |
+|       |       |           | 193888, 202590, 202591,    |
+|       |       |           | 202617, 202618, 212071,    |
+|       |       |           | 212072, 212116, 212118,    |
+|       |       |           | 212127, 212739, 212805,    |
+|       |       |           | 212806, 213513, 213514,    |
+|       |       |           | 213545, 213560, 219950,    |
+|       |       |           | 219959, 236788, 236833,    |
+|       |       |           | 242468, 242505, 242563,    |
+|       |       |           | 242597, 252422, 257766,    |
+|       |       |           | 271331, 300250, 300252,    |
+|       |       |           | 398407, 401660, 414873,    |
+|       |       |           | 436538, 440938, 448317,    |
+|       |       |           | 452557, 456716, 467701     |
++-------+-------+-----------+----------------------------+
+| 3829  | i     | 56        | 174534, 192355, 204706,    |
+|       |       |           | 204708, 211099, 211100,    |
+|       |       |           | 211132, 211141, 211198,    |
+|       |       |           | 211228, 211478, 211484,    |
+|       |       |           | 211490, 211527, 211531,    |
+|       |       |           | 211533, 211540, 211544,    |
+|       |       |           | 211545, 214433, 214434,    |
+|       |       |           | 214464, 214465, 214467,    |
+|       |       |           | 214468, 214558, 227882,    |
+|       |       |           | 227883, 227917, 227950,    |
+|       |       |           | 227951, 227976, 227984,    |
+|       |       |           | 228020, 228092, 230740,    |
+|       |       |           | 230774, 230776, 244029,    |
+|       |       |           | 248970, 256353, 256383,    |
+|       |       |           | 263502, 263511, 280216,    |
+|       |       |           | 280217, 280271, 410996,    |
+|       |       |           | 433960, 433992, 457681,    |
+|       |       |           | 457723, 457749, 479620,    |
+|       |       |           | 496960, 496989             |
++-------+-------+-----------+----------------------------+
+| 3829  | z     | 26        | 7997, 7999, 8003, 8029,    |
+|       |       |           | 8030, 8045, 13287, 13332,  |
+|       |       |           | 32682, 209010, 209015,     |
+|       |       |           | 209018, 209031, 209032,    |
+|       |       |           | 209061, 209063, 209068,    |
+|       |       |           | 209080, 226983, 240852,    |
+|       |       |           | 240854, 243019, 303559,    |
+|       |       |           | 426672, 460130, 462714     |
++-------+-------+-----------+----------------------------+
+| 3829  | y     | 53        | 5882, 5884, 5886, 12453,   |
+|       |       |           | 12454, 12466, 12471, 12481,|
+|       |       |           | 37656, 37657, 37658,       |
+|       |       |           | 167862, 167863, 167864,    |
+|       |       |           | 167877, 169763, 169764,    |
+|       |       |           | 169765, 169811, 169812,    |
+|       |       |           | 169838, 169839, 189315,    |
+|       |       |           | 189317, 189318, 189382,    |
+|       |       |           | 190282, 206031, 206032,    |
+|       |       |           | 206033, 206039, 206073,    |
+|       |       |           | 207791, 207792, 246649,    |
+|       |       |           | 266115, 266117, 266167,    |
+|       |       |           | 266168, 267504, 282398,    |
+|       |       |           | 282445, 284048, 306181,    |
+|       |       |           | 306182, 306188, 406992,    |
+|       |       |           | 407919, 425484, 443127,    |
+|       |       |           | 444725, 456651, 458253     |
++-------+-------+-----------+----------------------------+
+
+
+
 HSC RC2
 ^^^^^^^
 
-The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed every two weeks using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including `jointcal`, which is not included in `ci_hsc`) as well as the `pipe_analysis` scripts, which generate a large suite of validation plots, and an uplodate of the results of `validate_drp` to SQuaSH.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset
+The "RC2" dataset consists of two complete HSC SSP-Wide tracts and a single HSC SSP-UltraDeep tract (in the COSMOS field).  This dataset is processed monthly using the weekly releases of the DM stack.  The processing includes the entire current DM pipeline (including tasks that are not included in `ci_hsc`) as well as `analysis_tools` tasks, which generate a large suite of validation plots and associated metrics that are uploaded to the `Sasquatch <https://sasquatch.lsst.io/>`_ database and monitored on chronograf dashboards.  Processing currently requires some manual supervision, but we expect processing of this scale to eventually be fully automated.  See also https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset.
 
-The HSC RC2 data is presently (2021-02-02) available at NCSA at in `/datasets/hsc/repo`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
+The HSC RC2 data is presently (2024-02-21) available at the USDF in a shared Butler repository at `/repo/main/hsc`.  The HSC dataset was defined in a JIRA ticket: `Redefine HSC "RC" dataset for bi-weeklies processing <https://jira.lsstcorp.org/browse/DM-11345>`_
 
-Particular attention was paid in defining this dataset for it to consist of both mostly good data plus some specific known more challenging cases (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of a the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
+Particular attention was paid in defining this dataset for it to consist of mostly good data plus some specific cases known to be more challenging (see above JIRA issue for details).  Explicitly increasing the proportion of more challenging cases increases the efficiency of identifying problems for a fixed amount of compute resources at the expense of making the total scientific performance numbers less representative of the average quality for a full-survey-sized set of data.  This is a good tradeoff to make, but also an important point to keep in mind when using the processing results of such datasets to make predictions of performance of the LSST Science Pipelines on LSST data.
 
-The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_
+.. The monthly processing of this dataset is tracked at: `Reprocessing of the HSC RC2 dataset <https://confluence.lsstcorp.org/display/DM/Reprocessing+of+the+HSC+RC2+dataset#/>`_.
 
-The DM Tech Note `DMTN-088 <https://dmtn-088.lsst.io/>`_ provides a brief introduction to the processing of this dataset at the LSST Data Facility (LDF), i.e., NCSA.  There are some updates in the un-merged branch `DMTN-088 (DM-15546) <https://dmtn-088.lsst.io/v/DM-15546/index.html>`_
+.. The DM Tech Note `DMTN-088 <https://dmtn-088.lsst.io/>`_ provides a brief introduction to the processing of this dataset at the LSST Data Facility (LDF).  There are some updates in the un-merged branch `DMTN-088 (DM-15546) <https://dmtn-088.lsst.io/v/DM-15546/index.html>`_
 
 The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM-11345 <https://jira.lsstcorp.org/browse/DM-11345?focusedCommentId=90372&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-90372>`_ to be:
 
 +-----------+-------+----------+-----------+----------------------------+
 | Field     | Tract | Filter   | NumVisits | VisitList                  |
 +===========+=======+==========+===========+============================+
-| WIDE_VVDS | 9697  | HSC_G    | 22        | 6320^34338^34342^34362^    |
-|           |       |          |           | 34366^34382^34384^34400^   |
-|           |       |          |           | 34402^34412^34414^34422^   |
-|           |       |          |           | 34424^34448^34450^34464^   |
-|           |       |          |           | 34468^34478^34480^34482^   |
-|           |       |          |           | 34484^34486                |
+| WIDE_VVDS | 9697  | HSC_G    | 22        | 6320,34338,34342,34362,    |
+|           |       |          |           | 34366,34382,34384,34400,   |
+|           |       |          |           | 34402,34412,34414,34422,   |
+|           |       |          |           | 34424,34448,34450,34464,   |
+|           |       |          |           | 34468,34478,34480,34482,   |
+|           |       |          |           | 34484,34486                |
 +-----------+-------+----------+-----------+----------------------------+
-| WIDE_VVDS | 9697  | HSC-R    | 22        | 7138^34640^34644^34648^    |
-|           |       |          |           | 34652^34664^34670^34672^   |
-|           |       |          |           | 34674^34676^34686^34688^   |
-|           |       |          |           | 34690^34698^34706^34708^   |
-|           |       |          |           | 34712^34714^34734^34758^   |
-|           |       |          |           | 34760^34772                |
+| WIDE_VVDS | 9697  | HSC-R    | 22        | 7138,34640,34644,34648,    |
+|           |       |          |           | 34652,34664,34670,34672,   |
+|           |       |          |           | 34674,34676,34686,34688,   |
+|           |       |          |           | 34690,34698,34706,34708,   |
+|           |       |          |           | 34712,34714,34734,34758,   |
+|           |       |          |           | 34760,34772                |
 +-----------+-------+----------+-----------+----------------------------+
-| WIDE_VVDS | 9697  | HSC-I    | 33        | 35870^35890^35892^35906^   |
-|           |       |          |           | 35936^35950^35974^36114^   |
-|           |       |          |           | 36118^36140^36144^36148^   |
-|           |       |          |           | 36158^36160^36170^36172^   |
-|           |       |          |           | 36180^36182^36190^36192^   |
-|           |       |          |           | 36202^36204^36212^36214^   |
-|           |       |          |           | 36216^36218^36234^36236^   |
-|           |       |          |           | 36238^36240^36258^36260^   |
+| WIDE_VVDS | 9697  | HSC-I    | 33        | 35870,35890,35892,35906,   |
+|           |       |          |           | 35936,35950,35974,36114,   |
+|           |       |          |           | 36118,36140,36144,36148,   |
+|           |       |          |           | 36158,36160,36170,36172,   |
+|           |       |          |           | 36180,36182,36190,36192,   |
+|           |       |          |           | 36202,36204,36212,36214,   |
+|           |       |          |           | 36216,36218,36234,36236,   |
+|           |       |          |           | 36238,36240,36258,36260,   |
 |           |       |          |           | 36262                      |
 +-----------+-------+----------+-----------+----------------------------+
-| WIDE_VVDS | 9697  | HSC-Z    | 33        | 36404^36408^36412^36416^   |
-|           |       |          |           | 36424^36426^36428^36430^   |
-|           |       |          |           | 36432^36434^36438^36442^   |
-|           |       |          |           | 36444^36446^36448^36456^   |
-|           |       |          |           | 36458^36460^36466^36474^   |
-|           |       |          |           | 36476^36480^36488^36490^   |
-|           |       |          |           | 36492^36494^36498^36504^   |
-|           |       |          |           | 36506^36508^38938^38944^   |
+| WIDE_VVDS | 9697  | HSC-Z    | 33        | 36404,36408,36412,36416,   |
+|           |       |          |           | 36424,36426,36428,36430,   |
+|           |       |          |           | 36432,36434,36438,36442,   |
+|           |       |          |           | 36444,36446,36448,36456,   |
+|           |       |          |           | 36458,36460,36466,36474,   |
+|           |       |          |           | 36476,36480,36488,36490,   |
+|           |       |          |           | 36492,36494,36498,36504,   |
+|           |       |          |           | 36506,36508,38938,38944,   |
 |           |       |          |           | 38950                      |
 +-----------+-------+----------+-----------+----------------------------+
-| WIDE_VVDS | 9697  | HSC-Y    | 33        | 34874^34942^34944^34946^   |
-|           |       |          |           | 36726^36730^36738^36750^   |
-|           |       |          |           | 36754^36756^36758^36762^   |
-|           |       |          |           | 36768^36772^36774^36776^   |
-|           |       |          |           | 36778^36788^36790^36792^   |
-|           |       |          |           | 36794^36800^36802^36808^   |
-|           |       |          |           | 36810^36812^36818^36820^   |
-|           |       |          |           | 36828^36830^36834^36836^   |
+| WIDE_VVDS | 9697  | HSC-Y    | 33        | 34874,34942,34944,34946,   |
+|           |       |          |           | 36726,36730,36738,36750,   |
+|           |       |          |           | 36754,36756,36758,36762,   |
+|           |       |          |           | 36768,36772,36774,36776,   |
+|           |       |          |           | 36778,36788,36790,36792,   |
+|           |       |          |           | 36794,36800,36802,36808,   |
+|           |       |          |           | 36810,36812,36818,36820,   |
+|           |       |          |           | 36828,36830,36834,36836,   |
 |           |       |          |           | 36838                      |
 +-----------+-------+----------+-----------+----------------------------+
 | WIDE_VVDS | 9697  | TOTAL    | 143       | Size: 1.7 TB               |
@@ -258,41 +468,41 @@ The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM
 +--------------+-------+--------+-----------+----------------------------+
 | Field        | Tract | Filter | NumVisits | VisitList                  |
 +==============+=======+========+===========+============================+
-| WIDE_GAMA15H | 9615  | HSC_G  | 17        | 26024^26028^26032^26036^   |
-|              |       |        |           | 26044^26046^26048^26050^   |
-|              |       |        |           | 26058^26060^26062^26070^   |
-|              |       |        |           | 26072^26074^26080^26084^   |
+| WIDE_GAMA15H | 9615  | HSC_G  | 17        | 26024,26028,26032,26036,   |
+|              |       |        |           | 26044,26046,26048,26050,   |
+|              |       |        |           | 26058,26060,26062,26070,   |
+|              |       |        |           | 26072,26074,26080,26084,   |
 |              |       |        |           | 26094                      |
 +--------------+-------+--------+-----------+----------------------------+
-| WIDE_GAMA15H | 9615  | HSC-R  | 17        | 23864^23868^23872^23876^   |
-|              |       |        |           | 23884^23886^23888^23890^   |
-|              |       |        |           | 23898^23900^23902^23910^   |
-|              |       |        |           | 23912^23914^23920^23924^   |
+| WIDE_GAMA15H | 9615  | HSC-R  | 17        | 23864,23868,23872,23876,   |
+|              |       |        |           | 23884,23886,23888,23890,   |
+|              |       |        |           | 23898,23900,23902,23910,   |
+|              |       |        |           | 23912,23914,23920,23924,   |
 |              |       |        |           | 28976                      |
 +--------------+-------+--------+-----------+----------------------------+
-| WIDE_GAMA15H | 9615  | HSC-I  | 26        | 1258^1262^1270^1274^       |
-|              |       |        |           | 1278^1280^1282^1286^       |
-|              |       |        |           | 1288^1290^1294^1300^       |
-|              |       |        |           | 1302^1306^1308^1310^       |
-|              |       |        |           | 1314^1316^1324^1326^       |
-|              |       |        |           | 1330^24494^24504^24522^    |
-|              |       |        |           | 24536^24538                |
+| WIDE_GAMA15H | 9615  | HSC-I  | 26        | 1258,1262,1270,1274,       |
+|              |       |        |           | 1278,1280,1282,1286,       |
+|              |       |        |           | 1288,1290,1294,1300,       |
+|              |       |        |           | 1302,1306,1308,1310,       |
+|              |       |        |           | 1314,1316,1324,1326,       |
+|              |       |        |           | 1330,24494,24504,24522,    |
+|              |       |        |           | 24536,24538                |
 +--------------+-------+--------+-----------+----------------------------+
-| WIDE_GAMA15H | 9615  | HSC-Z  | 26        | 23212^23216^23224^23226^   |
-|              |       |        |           | 23228^23232^23234^23242^   |
-|              |       |        |           | 23250^23256^23258^27090^   |
-|              |       |        |           | 27094^27106^27108^27116^   |
-|              |       |        |           | 27118^27120^27126^27128^   |
-|              |       |        |           | 27130^27134^27136^27146^   |
-|              |       |        |           | 27148^27156                |
+| WIDE_GAMA15H | 9615  | HSC-Z  | 26        | 23212,23216,23224,23226,   |
+|              |       |        |           | 23228,23232,23234,23242,   |
+|              |       |        |           | 23250,23256,23258,27090,   |
+|              |       |        |           | 27094,27106,27108,27116,   |
+|              |       |        |           | 27118,27120,27126,27128,   |
+|              |       |        |           | 27130,27134,27136,27146,   |
+|              |       |        |           | 27148,27156                |
 +--------------+-------+--------+-----------+----------------------------+
-| WIDE_GAMA15H | 9615  | HSC-Y  | 26        | 380^384^388^404^           |
-|              |       |        |           | 408^424^426^436^           |
-|              |       |        |           | 440^442^446^452^           |
-|              |       |        |           | 456^458^462^464^           |
-|              |       |        |           | 468^470^472^474^           |
-|              |       |        |           | 478^27032^27034^27042^     |
-|              |       |        |           | 27066^27068                |
+| WIDE_GAMA15H | 9615  | HSC-Y  | 26        | 380,384,388,404,           |
+|              |       |        |           | 408,424,426,436,           |
+|              |       |        |           | 440,442,446,452,           |
+|              |       |        |           | 456,458,462,464,           |
+|              |       |        |           | 468,470,472,474,           |
+|              |       |        |           | 478,27032,27034,27042,     |
+|              |       |        |           | 27066,27068                |
 +--------------+-------+--------+-----------+----------------------------+
 | WIDE_GAMA15H | 9615  | TOTAL  | 112       | Size: 1.4 TB               |
 +--------------+-------+--------+-----------+----------------------------+
@@ -300,62 +510,66 @@ The fields are defined in the JIRA issue at `https://jira.lsstcorp.org/browse/DM
 +-----------+-------+--------+-----------+----------------------------+
 | Field     | Tract | Filter | NumVisits | VisitList                  |
 +===========+=======+========+===========+============================+
-| UD_COSMOS | 9813  | HSC_G  | 17        | 11690^11692^11694^11696^   |
-|           |       |        |           | 11698^11700^11702^11704^   |
-|           |       |        |           | 11706^11708^11710^11712^   |
-|           |       |        |           | 29324^29326^29336^29340^   |
+| UD_COSMOS | 9813  | HSC_G  | 17        | 11690,11692,11694,11696,   |
+|           |       |        |           | 11698,11700,11702,11704,   |
+|           |       |        |           | 11706,11708,11710,11712,   |
+|           |       |        |           | 29324,29326,29336,29340,   |
 |           |       |        |           | 29350                      |
 +-----------+-------+--------+-----------+----------------------------+
-| UD_COSMOS | 9813  | HSC-R  | 16        | 1202^1204^1206^1208^       |
-|           |       |        |           | 1210^1212^1214^1216^       |
-|           |       |        |           | 1218^1220^23692^23694^     |
-|           |       |        |           | 23704^23706^23716^23718    |
+| UD_COSMOS | 9813  | HSC-R  | 16        | 1202,1204,1206,1208,       |
+|           |       |        |           | 1210,1212,1214,1216,       |
+|           |       |        |           | 1218,1220,23692,23694,     |
+|           |       |        |           | 23704,23706,23716,23718    |
 +-----------+-------+--------+-----------+----------------------------+
-| UD_COSMOS | 9813  | HSC-I  | 33        | 1228^1230^1232^1238^       |
-|           |       |        |           | 1240^1242^1244^1246^       |
-|           |       |        |           | 1248^19658^19660^19662^    |
-|           |       |        |           | 19680^19682^19684^19694^   |
-|           |       |        |           | 19696^19698^19708^19710^   |
-|           |       |        |           | 19712^30482^30484^30486^   |
-|           |       |        |           | 30488^30490^30492^30494^   |
-|           |       |        |           | 30496^30498^30500^30502^   |
+| UD_COSMOS | 9813  | HSC-I  | 33        | 1228,1230,1232,1238,       |
+|           |       |        |           | 1240,1242,1244,1246,       |
+|           |       |        |           | 1248,19658,19660,19662,    |
+|           |       |        |           | 19680,19682,19684,19694,   |
+|           |       |        |           | 19696,19698,19708,19710,   |
+|           |       |        |           | 19712,30482,30484,30486,   |
+|           |       |        |           | 30488,30490,30492,30494,   |
+|           |       |        |           | 30496,30498,30500,30502,   |
 |           |       |        |           | 30504                      |
 +-----------+-------+--------+-----------+----------------------------+
-| UD_COSMOS | 9813  | HSC-Z  | 31        | 1166^1168^1170^1172^       |
-|           |       |        |           | 1174^1176^1178^1180^       |
-|           |       |        |           | 1182^1184^1186^1188^       |
-|           |       |        |           | 1190^1192^1194^17900^      |
-|           |       |        |           | 17902^17904^17906^17908^   |
-|           |       |        |           | 17926^17928^17930^17932^   |
-|           |       |        |           | 17934^17944^17946^17948^   |
-|           |       |        |           | 17950^17952^17962          |
+| UD_COSMOS | 9813  | HSC-Z  | 31        | 1166,1168,1170,1172,       |
+|           |       |        |           | 1174,1176,1178,1180,       |
+|           |       |        |           | 1182,1184,1186,1188,       |
+|           |       |        |           | 1190,1192,1194,17900,      |
+|           |       |        |           | 17902,17904,17906,17908,   |
+|           |       |        |           | 17926,17928,17930,17932,   |
+|           |       |        |           | 17934,17944,17946,17948,   |
+|           |       |        |           | 17950,17952,17962          |
 +-----------+-------+--------+-----------+----------------------------+
-| UD_COSMOS | 9813  | HSC-Y  | 52        | 318^322^324^326^           |
-|           |       |        |           | 328^330^332^344^           |
-|           |       |        |           | 346^348^350^352^           |
-|           |       |        |           | 354^356^358^360^           |
-|           |       |        |           | 362^1868^1870^1872^        |
-|           |       |        |           | 1874^1876^1880^1882^       |
-|           |       |        |           | 11718^11720^11722^11724^   |
-|           |       |        |           | 11726^11728^11730^11732^   |
-|           |       |        |           | 11734^11736^11738^11740^   |
-|           |       |        |           | 22602^22604^22606^22608^   |
-|           |       |        |           | 22626^22628^22630^22632^   |
-|           |       |        |           | 22642^22644^22646^22648^   |
-|           |       |        |           | 22658^22660^22662^22664    |
+| UD_COSMOS | 9813  | HSC-Y  | 52        | 318,322,324,326,           |
+|           |       |        |           | 328,330,332,344,           |
+|           |       |        |           | 346,348,350,352,           |
+|           |       |        |           | 354,356,358,360,           |
+|           |       |        |           | 362,1868,1870,1872,        |
+|           |       |        |           | 1874,1876,1880,1882,       |
+|           |       |        |           | 11718,11720,11722,11724,   |
+|           |       |        |           | 11726,11728,11730,11732,   |
+|           |       |        |           | 11734,11736,11738,11740,   |
+|           |       |        |           | 22602,22604,22606,22608,   |
+|           |       |        |           | 22626,22628,22630,22632,   |
+|           |       |        |           | 22642,22644,22646,22648,   |
+|           |       |        |           | 22658,22660,22662,22664    |
 +-----------+-------+--------+-----------+----------------------------+
-| UD_COSMOS | 9813  | NB0921 | 28        | 23038^23040^23042^23044^   |
-|           |       |        |           | 23046^23048^23050^23052^   |
-|           |       |        |           | 23054^23056^23594^23596^   |
-|           |       |        |           | 23598^23600^23602^23604^   |
-|           |       |        |           | 23606^24298^24300^24302^   |
-|           |       |        |           | 24304^24306^24308^24310^   |
-|           |       |        |           | 25810^25812^25814^25816    |
+| UD_COSMOS | 9813  | NB0921 | 28        | 23038,23040,23042,23044,   |
+|           |       |        |           | 23046,23048,23050,23052,   |
+|           |       |        |           | 23054,23056,23594,23596,   |
+|           |       |        |           | 23598,23600,23602,23604,   |
+|           |       |        |           | 23606,24298,24300,24302,   |
+|           |       |        |           | 24304,24306,24308,24310,   |
+|           |       |        |           | 25810,25812,25814,25816    |
 +-----------+-------+--------+-----------+----------------------------+
 | UD_COSMOS | 9813  | TOTAL  | 177       | Size: 3.2 TB               |
 +-----------+-------+--------+-----------+----------------------------+
 
 This dataset satisfies the definition above for a MEDIUM dataset.
+
+LARGE
+-----
+
 
 HSC RC3 (proposed)
 ^^^^^^^^^^^^^^^^^^
@@ -397,13 +611,10 @@ We will retain all data that are currently part of RC2, which were selected to r
 This section is a condensed encapsulation of discussion that took place on `this Confluence page <https://confluence.lsstcorp.org/x/vY1cC>`_; for more details about the considerations that were discussed, please consult that page.
 
 
-LARGE
------
-
 HSC SSP PDR1 and PDR2
 ^^^^^^^^^^^^^^^^^^^^^
 
-The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large dataset could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
+The full HSC SSP Public Data Release 1 (PDR1) dataset has been processed by LSST DM twice.  This is a LARGE dataset.  The timescale for these runs is essentially as-needed.  The processing of these large datasets could be increased as the workflow and orchestration tooling for automated execution improves.  We expect this scale of processing to always require some manual supervision (but significantly less than it does today).  As more data becomes available with future SSP public releases, we expect this dataset to grow to include them.
 
 See reports at:
 
